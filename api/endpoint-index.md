@@ -6,6 +6,7 @@ title: DE API Documentation
 # Endpoint Index
 
 * [GET /](endpoints/misc.html#verifying-that-terrain-is-running)
+* [GET /admin/apps](endpoints/app-metadata.html#searching-for-apps)
 * [POST /admin/apps](endpoints/app-metadata.html#categorizing-apps)
 * [GET /admin/apps/categories](endpoints/app-metadata.html#listing-app-categories)
 * [POST /admin/apps/categories](endpoints/app-metadata.html#adding-categories)

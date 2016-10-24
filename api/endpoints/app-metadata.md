@@ -368,7 +368,11 @@ Secured Endpoint: GET /apps?search={term}
 
 Delegates to apps: GET /apps?search={term}
 
-This endpoint is a passthrough to the apps endpoint using the same path.
+Secured Endpoint: GET /admin/apps
+
+Delegates to apps: GET /admin/apps
+
+These endpoints are passthroughs to the apps endpoints using the same path.
 Please see the apps service documentation for more information.
 
 ## Previewing Command Line Arguments
