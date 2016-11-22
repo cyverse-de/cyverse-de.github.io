@@ -39,35 +39,106 @@ The infinite is attainable with Terrain!
 
 Secured Endpoint: GET /secured/bootstrap
 
-The DE calls this service as soon as the user logs in to initialize the user's workspace if the user has never logged in before, and returns user information, including the user's preferences, the user's home path, the user's trash path, and the base trash. This service always records the fact that the user logged in.
+Delegates to apps: `POST /users/login`
 
-Note that the required `ip-address` query parameter cannot be obtained automatically in most cases. Because of this, the `ip-address` parameter must be passed to this service. Here's an example:
+Delegates to apps: `GET /workspaces`
+
+Delegates to data-info: `GET /navigation/base-paths`
+
+Delegates to preferences: `GET /{username}`
+
+
+The DE calls this service as soon as the user logs in to initialize the user's workspace
+if the user has never logged in before, and returns user information,
+including the user's preferences, the user's home path, the user's trash path, and the base trash.
+This service always records the fact that the user logged in.
+
+Note that the required `ip-address` query parameter cannot be obtained automatically in most cases.
+Because of this, the `ip-address` parameter must be passed to this service.
+Here's an example:
 
 ```json
 $ curl -H "$AUTH_HEADER" "http://by-tor:8888/secured/bootstrap?ip-address=127.0.0.1" | python -mjson.tool
 {
-    "loginTime": "1374190755304",
-    "newWorkspace": false,
-    "workspaceId": "4",
+  "user_info": {
     "username": "snow-dog",
+    "full_username": "snow-dog@iplantcollaborative.org",
     "email": "sd@example.org",
-    "firstName": "Snow",
-    "lastName": "Dog",
-    "userHomePath": "/iplant/home/snow-dog",
-    "userTrashPath": "/iplant/trash/snow-dog",
-    "baseTrashPath": "/iplant/trash",
-    "preferences": {
-        "systemDefaultOutputDir": {
-            "id": "/iplant/home/snow-dog/analyses",
-            "path": "/iplant/home/snow-dog/analyses"
-        },
-        "defaultOutputFolder": {
-            "id": "/iplant/home/snow-dog/analyses",
-            "path": "/iplant/home/snow-dog/analyses"
-        }
+    "first_name": "Snow",
+    "last_name": "Dog"
+  },
+  "session": {
+    "login_time": 1374190755304,
+    "auth_redirect": {
+      "example": "https://example.org"
     }
+  },
+  "workspace": {
+    "new_workspace": false,
+    "workspace_id": "4"
+  },
+  "data_info": {
+    "user_home_path": "/iplant/home/snow-dog",
+    "user_trash_path": "/iplant/trash/snow-dog",
+    "base_trash_path": "/iplant/trash"
+  },
+  "preferences": {
+    "system_default_output_dir": {
+      "id": "/iplant/home/snow-dog/analyses",
+      "path": "/iplant/home/snow-dog/analyses"
+    },
+    "default_output_folder": {
+      "id": "/iplant/home/snow-dog/analyses",
+      "path": "/iplant/home/snow-dog/analyses"
+    }
+  }
 }
 ```
+
+This endpoint calls different services to obtain the different pieces of its response.
+If any of these services (besides terrain) are down,
+the bootstrap endpoint can still return success to the client,
+but will provide an error message letting the client know which services are down.
+
+For example:
+
+```json
+{
+  "user_info": {
+    "username": "snow-dog",
+    "full_username": "snow-dog@iplantcollaborative.org",
+    "email": "sd@example.org",
+    "first_name": "Snow",
+    "last_name": "Dog"
+  },
+  "session": {
+    "error": "java.net.ConnectException: Connection refused"
+  },
+  "workspace": {
+    "status": 400,
+    "error": {
+      "error_code": "ERR_ILLEGAL_ARGUMENT",
+      "reason": {
+        "foo": "disallowed-key"
+      }
+    }
+  },
+  "data_info": {
+    "status": 404,
+    "error": {
+      "success": false,
+      "reason": "unrecognized service path"
+    }
+  },
+  "preferences": {
+    "status": 503,
+    "error": "<html>\r\n<head><title>503 Service Unavailable</title></head>\r\n<body bgcolor=\"white\">\r\n<center><h1>503 Service Unavailable</h1></center>\r\n<hr><center>nginx/1.11.4</center>\r\n</body>\r\n</html>\r\n"
+  }
+}
+```
+
+These are examples of the different kinds of errors that can show up from any of our services,
+so any of these errors can show up in the `session`, `workspace`, `data_info`, or `preferences` error fields.
 
 ## Recording when a User Logs Out
 
