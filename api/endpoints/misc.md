@@ -316,7 +316,7 @@ Here's an example request body:
 Here's an example:
 
 ```
-$ curl -sH "X-Iplant-De-Jwt: $JWT" "http://localhost:31325/support-email" -d '
+$ curl -sH "X-Iplant-De-Jwt: $JWT" "http://by-tor:8888/support-email" -d '
 {
   "email": "sender@example.org",
   "subject": "Just Testing",
