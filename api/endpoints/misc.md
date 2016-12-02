@@ -7,18 +7,20 @@ title: DE API Documentation
 
 * [Miscellaneous Terrain Endpoints](#miscellaneous-terrain-endpoints)
     * [Verifying that Terrain is Running](#verifying-that-terrain-is-running)
-    * [Initializing a User's Workspace](#initializing-a-users-workspace)
+    * [Initializing a User's Workspace and Preferences](#initializing-a-users-workspace-and-preferences)
+    * [Recording when a User Logs Out](#recording-when-a-user-logs-out)
     * [Saving User Session Data](#saving-user-session-data)
     * [Retrieving User Session Data](#retrieving-user-session-data)
-    * [Removing User Session Data](#removing-user-seession-data)
+    * [Removing User Session Data](#removing-user-session-data)
     * [Saving User Preferences](#saving-user-preferences)
     * [Retrieving User Preferences](#retrieving-user-preferences)
     * [Removing User Preferences](#removing-user-preferences)
     * [Obtaining Identifiers](#obtaining-identifiers)
-    * [Submitting User Feedback](#submitting-user-feedback)
-    * [Getting a user's saved searches](#getting-saved-searches)
-    * [Setting a user's saved searches](#setting-saved-searches)
-    * [Deleting a user's saved searches](#deleting-saved-searches)
+    * [Requesting Support](#requesting-support)
+    * [Saved Searches](#saved-searches)
+        * [Getting saved searches](#getting-saved-searches)
+        * [Setting saved searches](#setting-saved-searches)
+        * [Deleting saved searches](#deleting-saved-searches)
 
 # Miscellaneous Terrain Endpoints
 
@@ -288,32 +290,51 @@ Unsecured Endpoint: GET /uuid
 
 In some cases, it's difficult for the UI client code to generate UUIDs for objects that require them. This service returns a single UUID in the response body. The UUID is returned as a plain text string.
 
-## Submitting User Feedback
+## Requesting Support
 
-Secured Endpoint: PUT /secured/feedback
+Secured Endpoint: POST /support-email
 
-This endpoint submits feedback from the user to a configurable iPlant email address. The destination email address is stored in the configuration settting, `terrain.email.feedback-dest`. The request body is a simple JSON object with the question text in the keys and the answer or answers in the values. The answers can either be strings or lists of strings:
+This endpoint submits feedback from the user to a configurable iPlant email address. The destination email address is stored in the configuration settting, `terrain.email.support-email-dest`. The request body is a JSON object with three members:
+
+* email (optional) - The sending email address. If an email address is not provided then the email address of the authenticated user will be used instead.
+* subject (optional) - The subject line of the email. If the subject line is not provided then `DE Support Request` will be used instead.
+* fields - A JSON object containing a set of key value pairs.
+
+Here's an example request body:
 
 ```json
 {
-    "question 1": "question 1 answer 1",
-    "question 2": [
-        "question 2 answer 1",
-        "question 2 answer 2"
-    ]
+  "email": "sender@example.org",
+  "subject": "Just Testing",
+  "fields": {
+    "Phrase": "Ekky, ekky, ekky, z'bang, zoom, boing, znourningmn",
+    "Meaning": "Who knows?"
+  }
 }
 ```
 
 Here's an example:
 
 ```
-$ curl -XPUT -sH "$AUTH_HEADER" "http://by-tor:8888/secured/feedback" -d '
+$ curl -sH "X-Iplant-De-Jwt: $JWT" "http://localhost:31325/support-email" -d '
 {
-    "What is the circumference of the Earth?": "Roughly 25000 miles.",
-    "What are your favorite programming languages?": [ "Clojure", "Scala", "Perl" ]
-}
-'
+  "email": "sender@example.org",
+  "subject": "Just Testing",
+  "fields": {
+    "Phrase": "Ekky, ekky, ekky, z'bang, zoom, boing, znourningmn",
+    "Meaning": "Who knows?"
+  }
+}'
 ```
+
+The email message body will contain simply the keys and values separated by colons. In the above example, the message body might look something like this:
+
+```
+Phrase: Ekky, ekky, ekky, z'bang, zoom, boing, znourningmn
+Meaning: Who knows?
+```
+
+The line order is not guaranteed in the message body because the member order is not guaranteed in a JSON object.
 
 ## Saved Searches
 
