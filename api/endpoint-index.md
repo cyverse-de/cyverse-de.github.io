@@ -1,3 +1,8 @@
+---
+layout: page
+title: DE API Documentation
+---
+
 # Endpoint Index
 
 * [GET /](endpoints/misc.html#verifying-that-terrain-is-running)
