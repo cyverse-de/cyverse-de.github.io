@@ -139,6 +139,7 @@ title: DE API Documentation
 * [PUT /secured/favorites/filesystem/{favorite}](endpoints/favorites.html#marking-a-data-resource-as-favorite)
 * [POST /secured/favorites/filter](endpoints/favorites.html#filter-a-set-of-resources-for-favorites)
 * [GET /secured/fileio/download](endpoints/fileio.html#downloading)
+* [GET /secured/filesystem/display-download](endpoints/fileio.html#downloading)
 * [POST /secured/fileio/save](endpoints/fileio.html#save)
 * [POST /secured/fileio/saveas](endpoints/fileio.html#save-as)
 * [POST /secured/fileio/upload](endpoints/fileio.html#uploading)

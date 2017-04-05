@@ -29,6 +29,8 @@ Each section listed below lists the error codes that you may encounter. In addit
 
 __URL Path__: /secured/fileio/download
 
+__URL Path__: /secured/filesystem/display-download
+
 __HTTP Method__: GET
 
 __Request Query Parameters__:
@@ -50,7 +52,9 @@ __Curl Command__:
 
 This will result is the file contents being printed out to stdout. Redirect to a file to actually get the file.
 
-This endpoint delegates to data-info's GET /data/path/:zone/:path endpoint, with some processing.
+When using fileio/download, it's always downloaded as an attachment and the content-type is always application/octet-stream. When using display-download, attachment is a parameter that can be passed along.
+
+These endpoints delegate to data-info's GET /data/path/:zone/:path endpoint, with some processing.
 
 ## Uploading
 
