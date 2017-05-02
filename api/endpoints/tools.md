@@ -5,6 +5,7 @@ title: DE API Documentation
 
 # Table of Contents
 
+* [Tool Endpoints](#tool-endpoints)
     * [Listing and Searching for Tools](#listing-and-searching-for-tools)
     * [Add a Private Tool](#add-a-private-tool)
     * [Listing Permissions for a Set of Tools](#listing-permissions-for-a-set-of-tools)
@@ -14,6 +15,8 @@ title: DE API Documentation
     * [Importing Tools](#importing-tools)
     * [Deleting Tools](#deleting-tools)
     * [Updating Tools](#updating-tools)
+
+# Tool Endpoints
 
 ## Listing and Searching for Tools
 
