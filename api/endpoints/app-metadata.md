@@ -7,7 +7,6 @@ title: DE API Documentation
 
 * [Application Metadata Endpoints](#application-metadata-endpoints)
     * [Listing App Elements](#listing-app-elements)
-    * [Searching for Tools](#searching-for-tools)
     * [Listing App Identifiers](#listing-app-identifiers)
     * [Adding Categories](#adding-categories)
     * [Deleting Categories](#deleting-categories)
@@ -22,16 +21,12 @@ title: DE API Documentation
     * [App Documentation](#app-documentation)
     * [Listing App Categories](#listing-app-categories)
     * [Exporting an Analysis](#exporting-an-analysis)
-    * [Get a Tool by ID](#get-a-tool-by-id)
     * [Permanently Deleting an App](#permanently-deleting-an-app)
     * [Logically Deleting Apps](#logically-deleting-apps)
     * [Updating a Single-Step App](#updating-a-single-step-app)
     * [Creating a Pipeline](#creating-a-pipeline)
     * [Updating a Pipeline](#updating-a-pipeline)
     * [Updating App Labels](#updating-app-labels)
-    * [Importing Tools](#importing-tools)
-    * [Deleting Tools](#deleting-tools)
-    * [Updating Tools](#updating-tools)
     * [Rating Apps](#rating-apps)
     * [Deleting App Ratings](#deleting-app-ratings)
     * [Searching for Apps](#searching-for-apps)
@@ -69,15 +64,6 @@ Delegates to apps: GET /apps/elements
 Secured Endpoint: GET /apps/elements/{element-type}
 
 Delegates to apps: GET /apps/elements/{element-type}
-
-This endpoint is a passthrough to the apps endpoint using the same path.
-Please see the apps service documentation for more information.
-
-## Searching for Tools
-
-Unsecured Endpoint: GET /tools?search={search-term}
-
-Delegates to apps: GET /tools?search={search-term}
 
 This endpoint is a passthrough to the apps endpoint using the same path.
 Please see the apps service documentation for more information.
@@ -242,15 +228,6 @@ Delegates to apps: GET /export-workflow/{analysis-id}
 This endpoint is a passthrough to the apps endpoint using the same path.
 Please see the apps service documentation for more information.
 
-## Get a Tool by ID
-
-Secured Endpoint: GET /tools/{tool-id}
-
-Delegates to apps: GET /tools/{tool-id}
-
-This endpoint is a passthrough to the apps endpoint using the same path.
-Please see the apps service documentation for more information.
-
 ## Permanently Deleting an App
 
 Secured Endpoint: POST /admin/apps/shredder
@@ -315,33 +292,6 @@ Secured Endpoint: PATCH /admin/apps/{app-id}
 Delegates to apps: PATCH /apps/{app-id}
 
 These endpoints are passthroughs to the apps endpoint using the same path.
-Please see the apps service documentation for more information.
-
-## Importing Tools
-
-Secured Endpoint: POST /admin/tools
-
-Delegates to apps: POST /admin/tools
-
-This endpoint is a passthrough to the apps endpoint using the same path.
-Please see the apps service documentation for more information.
-
-## Deleting Tools
-
-Secured Endpoint: DELETE /admin/tools/{tool-id}
-
-Delegates to apps: DELETE /admin/tools/{tool-id}
-
-This endpoint is a passthrough to the apps endpoint using the same path.
-Please see the apps service documentation for more information.
-
-## Updating Tools
-
-Secured Endpoint: PATCH /admin/tools/{tool-id}
-
-Delegates to apps: PATCH /admin/tools/{tool-id}
-
-This endpoint is a passthrough to the apps endpoint using the same path.
 Please see the apps service documentation for more information.
 
 ## Rating Apps
