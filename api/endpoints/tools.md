@@ -15,6 +15,7 @@ title: DE API Documentation
     * [Importing Tools](#importing-tools)
     * [Deleting Tools](#deleting-tools)
     * [Updating Tools](#updating-tools)
+    * [Listing Apps by Tool ID](#listing-apps-by-tool-id)
 
 # Tool Endpoints
 
@@ -111,6 +112,19 @@ Delegates to apps: PATCH /tools/{tool-id}
 Secured Endpoint: PATCH /admin/tools/{tool-id}
 
 Delegates to apps: PATCH /admin/tools/{tool-id}
+
+These endpoints are passthroughs to the apps endpoints using the same path.
+Please see the apps service documentation for more information.
+
+## Listing Apps by Tool ID
+
+Secured Endpoint: GET /tools/{tool-id}/apps
+
+Delegates to apps: GET /tools/{tool-id}/apps
+
+Secured Endpoint: GET /admin/tools/{tool-id}/apps
+
+Delegates to apps: GET /admin/tools/{tool-id}/apps
 
 These endpoints are passthroughs to the apps endpoints using the same path.
 Please see the apps service documentation for more information.
