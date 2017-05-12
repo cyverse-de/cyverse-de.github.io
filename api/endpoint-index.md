@@ -231,6 +231,7 @@ title: DE API Documentation
 * [GET /secured/user-info](endpoints/collaborators.html#obtaining-user-info)
 * [GET /secured/user-search?search={search-string}](endpoints/collaborators.html#searching-for-users)
 * [POST /send-notification.](endpoints/notifications.html#sending-an-arbitrary-notification)
+* [GET /subjects](endpoints/subjects.html#search-for-subjects)
 * [POST /support-email](endpoints/misc.html#requesting-support)
 * [GET /tool-requests](endpoints/app-metadata.html#listing-tool-installation-requests)
 * [POST /tool-requests](endpoints/app-metadata.html#requesting-installation-of-a-tool)
