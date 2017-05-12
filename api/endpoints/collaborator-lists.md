@@ -10,6 +10,9 @@ title: DE API Documentation
     * [Adding a Collaborator List](#adding-a-collaborator-list)
     * [Getting Information About a Collaborator List](#getting-information-about-a-collaborator-list)
     * [Deleting a Collaborator List](#deleting-a-collaborator-list)
+    * [Listing Collaborator List Members](#listing-collaborator-list-members)
+    * [Adding Collaborator List Members](#adding-collaborator-list-members)
+    * [Removing Collaborator List Members](#removing-collaborator-list-members)
 
 # Collaborator List Management Endpoints
 
@@ -119,5 +122,60 @@ $ curl -sX DELETE -H "$AUTH_HEADER" "http://example.org/collaborator-lists/bar" 
   "type": "group",
   "id": "f449ea254cdf480a80a7ad96d785389d",
   "id_index": "10293"
+}
+```
+
+## Listing Collaborator List Members
+
+Secured Endpoint: GET /collaborator-lists/{name}/members
+
+```
+$ curl -sH "$AUTH_HEADER" http://example.org/collaborator-lists/foo/members | jq .
+{
+  "members": [
+    {
+      "id": "ipcdev",
+      "name": "Ipc Dev",
+      "first_name": "Ipc",
+      "last_name": "Dev",
+      "email": "ipcdev@example.org",
+      "institution": "Iplant collaborative",
+      "source_id": "ldap"
+    }
+  ]
+}
+```
+
+## Adding Collaborator List Members
+
+Secured Endpoint: POST /collaborator-lists/{name}/members
+
+```
+$ curl -sH "$AUTH_HEADER" -d '{"members":["ipctest"]}' http://example.org/collaborator-lists/foo/members | jq .
+{
+  "results": [
+    {
+      "success": true,
+      "subject_id": "ipctest",
+      "subject_name": "IPC Test"
+    }
+  ]
+}
+```
+
+## Removing Collaborator List Members
+
+Secured Endpoint: POST /collaborator-lists/{name}/members/deleter
+
+```
+$ curl -sH "$AUTH_HEADER" -d '{"members":["ipctest"]}' http://exmaple.org/collaborator-lists/foo/members/deleter | jq .
+{
+  "results": [
+    {
+      "success": true,
+      "subject_id": "ipctest",
+      "subject_name": "IPC Test"
+    }
+  ]
 }
 ```
