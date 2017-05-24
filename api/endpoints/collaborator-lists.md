@@ -9,6 +9,7 @@ title: DE API Documentation
     * [Listing Collaborator Lists](#listing-collaborator-lists)
     * [Adding a Collaborator List](#adding-a-collaborator-list)
     * [Getting Information About a Collaborator List](#getting-information-about-a-collaborator-list)
+    * [Updating a Collaborator List](#updating-a-collaborator-list)
     * [Deleting a Collaborator List](#deleting-a-collaborator-list)
     * [Listing Collaborator List Members](#listing-collaborator-list-members)
     * [Adding Collaborator List Members](#adding-collaborator-list-members)
@@ -103,6 +104,27 @@ $ curl -sH "$AUTH_HEADER" "http://example.org/collaborator-lists/foo" | jq .
   "id": "ac0868a8835d4e73b7079754777def59",
   "display_extension": "foo",
   "display_name": "iplant:de:de-2:users:dennis:collaborator-lists:foo",
+  "id_index": "10277"
+}
+```
+
+## Updating a Collaborator List
+
+Secured Endpoint: PATCH /collaborator-lists/{name}
+
+Two fields can currently be updated: `name` and `description`. Fields that aren't provided will remain unchanged.
+
+```
+$ curl -sH "$AUTH_HEADER" -H "Content-Type: application/json" -X PATCH -d '{"name": "baz", "description":"baz"}' \
+    "http://example.org/collaborator-lists/foo" | jq .
+{
+  "description": "baz",
+  "name": "baz",
+  "type": "group",
+  "extension": "baz",
+  "id": "ac0868a8835d4e73b7079754777def59",
+  "display_extension": "baz",
+  "display_name": "iplant:de:de-2:users:dennis:collaborator-lists:baz",
   "id_index": "10277"
 }
 ```

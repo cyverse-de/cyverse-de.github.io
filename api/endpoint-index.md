@@ -128,6 +128,7 @@ title: DE API Documentation
 * [POST /collaborator-lists](endpoints/collaborator-lists.html#adding-a-collaborator-list)
 * [DELETE /collaborator-lists/{name}](endpoints/collaborator-lists.html#deleting-a-collaborator-list)
 * [GET /collaborator-lists/{name}](endpoints/collaborator-lists.html#getting-information-about-a-collaborator-list)
+* [PATCH /collaborator-lists/{name}](endpoints/collaborator-lists.html#updating-a-collaborator-list)
 * [GET /collaborator-lists/{name}/members](endpoints/collaborator-lists.html#listing-collaborator-list-members)
 * [POST /collaborator-lists/{name}/members](endpoints/collaborator-lists.html#adding-collaborator-list-members)
 * [POST /collaborator-lists/{name}/members/deleter](endpoints/collaborator-lists.html#removing-collaborator-list-members)
