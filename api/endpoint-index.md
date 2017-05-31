@@ -66,6 +66,7 @@ title: DE API Documentation
 * [GET /admin/tools/{tool-id}](endpoints/tools.html#get-a-tool-by-id)
 * [PATCH /admin/tools/{tool-id}](endpoints/tools.html#updating-tools)
 * [GET /admin/tools/{tool-id}/apps](endpoints/tools.html#listing-apps-by-tool-id)
+* [POST /admin/tools/{tool-id}/publish](endpoints/tools.html#making-a-tool-public)
 * [GET /analyses](endpoints/app-execution.html#listing-jobs)
 * [POST /analyses](endpoints/app-execution.html#submitting-a-job-for-execution)
 * [POST /analyses/shredder](endpoints/app-execution.html#deleting-multiple-jobs)

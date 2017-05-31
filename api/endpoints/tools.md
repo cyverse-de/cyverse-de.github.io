@@ -16,6 +16,7 @@ title: DE API Documentation
     * [Deleting Tools](#deleting-tools)
     * [Updating Tools](#updating-tools)
     * [Listing Apps by Tool ID](#listing-apps-by-tool-id)
+    * [Making a Tool Public](#making-a-tool-public)
 
 # Tool Endpoints
 
@@ -127,4 +128,13 @@ Secured Endpoint: GET /admin/tools/{tool-id}/apps
 Delegates to apps: GET /admin/tools/{tool-id}/apps
 
 These endpoints are passthroughs to the apps endpoints using the same path.
+Please see the apps service documentation for more information.
+
+## Making a Tool Public
+
+Secured Endpoint: POST /admin/tools/{tool-id}/publish
+
+Delegates to apps: POST /admin/tools/{tool-id}/publish
+
+This endpoint is a passthrough to the apps endpoint using the same path.
 Please see the apps service documentation for more information.
