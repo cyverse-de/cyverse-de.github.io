@@ -42,22 +42,27 @@ This endpoint allows the caller to search for user information by username, emai
 
 ```json
 {
-    "truncated": true|false,
     "users": [
-      username-1: {
-          "email": "email-address-1",
-          "firstname": "first-name-1",
-          "institution": "institution-1",
-          "lastname": "last-name-1",
-          "username": "username-1"
-      },
-      username-n: {
-          "email": "email-address-n",
-          "firstname": "first-name-n",
-          "institution": "institution-n",
-          "lastname": "last-name-n",
-          "username": "username-n"
-      }]
+        {
+            "id": "id-1",
+            "name": "name-1",
+            "first_name": "first-name-1",
+            "last_name": "last-name-1",
+            "email": "email-address-1",
+            "institution": "institution-1",
+            "source_id": "source-id-1"
+        },
+        {
+            "id": "id-n",
+            "name": "name-n",
+            "first_name": "first-name-n",
+            "last_name": "last-name-n",
+            "email": "email-address-n",
+            "institution": "institution-n",
+            "source_id": "source-id-n"
+        }
+    ],
+    "truncated": false
 }
 ```
 
@@ -69,19 +74,19 @@ $ curl -sH "$AUTH_HEADER" "http://by-tor:8888/secured/user-search?search=nobody"
     "truncated": false,
     "users": [
         {
-            "email": "nobody@iplantcollaborative.org,
-            "firstname": Nobody",
-            "id": "725",
-            "institution": null,
-            "lastname": "Atall",
-            "position": null,
-            "username": "nobody"
+            "id": "nobody",
+            "name": "Nobody Inparticular",
+            "first_name": "Nobody",
+            "last_name": "Inparticular",
+            "email": "nobody@iplantcollaborative.org",
+            "institution": "iplant collaborative",
+            "source_id": "ldap"
         }
     ]
 }
 ```
 
-This endpoint delegates to iplant-groups' GET /subjects endpoint, but reformats the results to match the prior implementation with Trellis.
+This endpoint delegates to iplant-groups' GET /subjects endpoint.
 
 ## Obtaining User Info
 
@@ -91,23 +96,23 @@ This endpoint allows the caller to search for information about users with speci
 
 ```json
 {
-    username-1: {
-        "email": "email-address-1",
-        "firstname": "first-name-1",
+    "username-1": {
         "id": "id-1",
+        "name": "name-1",
+        "first_name": "first-name-1",
+        "last_name": "last-name-1",
+        "email": "email-address-1",
         "institution": "institution-1",
-        "lastname": "last-name-1",
-        "position": "position-1",
-        "username": "username-1"
+        "source_id": "source-id-1"
     },
-    username-n: {
-        "email": "email-address-n",
-        "firstname": "first-name-n",
+    "username-n": {
         "id": "id-n",
+        "name": "name-n",
+        "first_name": "first-name-n",
+        "last_name": "last-name-n",
+        "email": "email-address-n",
         "institution": "institution-n",
-        "lastname": "last-name-n",
-        "position": "position-n",
-        "username": "username-n"
+        "source_id": "source-id-n"
     }
 }
 ```
@@ -120,13 +125,13 @@ Here's an example with a match:
 $ curl -sH "$AUTH_HEADER" "http://by-tor:8888/secured/user-info?username=nobody" | python -mjson.tool
 {
     "nobody": {
+        "id": "nobody",
+        "name": "Nobody Inparticular",
+        "first_name": "Nobody",
+        "last_name": "Inparticular",
         "email": "nobody@iplantcollaborative.org",
-        "firstname": "Nobody",
-        "id": "3618",
         "institution": "iplant collaborative",
-        "lastname": "Inparticular",
-        "position": null,
-        "username": "nobody"
+        "source_id": "ldap"
     }
 }
 ```
@@ -138,4 +143,4 @@ $ curl -sH "$AUTH_HEADER" "http://by-tor:8888/secured/user-info?username=foo" | 
 {}
 ```
 
-This endpoint delegates to iplant-groups' GET /subjects/:subject-id endpoint, but reformats the results to match the prior implementation with Trellis.
+This endpoint delegates to iplant-groups' GET /subjects/:subject-id endpoint.
