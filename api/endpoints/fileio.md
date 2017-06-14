@@ -29,6 +29,8 @@ Each section listed below lists the error codes that you may encounter. In addit
 
 __URL Path__: /secured/fileio/download
 
+__HTTP Method__: GET
+
 __URL Path__: /secured/filesystem/display-download
 
 __HTTP Method__: GET
