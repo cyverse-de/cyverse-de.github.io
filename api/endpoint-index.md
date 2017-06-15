@@ -241,6 +241,7 @@ title: DE API Documentation
 * [GET /teams](endpoints/teams.html#listing-teams)
 * [POST /teams](endpoints/teams.html#creating-a-new-team)
 * [GET /teams/{name}](endpoints/teams.html#getting-team-information)
+* [PATCH /teams/{name}](endpoints/teams.html#updating-a-team)
 * [GET /tool-requests](endpoints/app-metadata.html#listing-tool-installation-requests)
 * [POST /tool-requests](endpoints/app-metadata.html#requesting-installation-of-a-tool)
 * [GET /tool-requests/status-codes](endpoints/app-metadata.html#listing-tool-request-status-codes)
