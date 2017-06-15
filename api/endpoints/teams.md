@@ -10,6 +10,7 @@ title: DE API Documentation
     * [Creating a New Team](#creating-a-new-team)
     * [Getting Team Information](#getting-team-information)
     * [Updating a Team](#updating-a-team)
+    * [Deleting a Team](#deleting-a-team)
 
 
 # Team Management Endpoints
@@ -196,3 +197,23 @@ One thing to note is the difference between the name in the request body and the
 body. The former is just the last portion of the team name, `some-other-team`. The latter both contain the username
 prefix, `dennis:some-other-team` (URL encoded in the URI). This helps to prevent teams from being renamed into another
 user's team folder, which would be a potential source of confusion.
+
+## Deleting a Team
+
+Secured Endpoint: DELETE /teams/{name}
+
+Deletes a team.
+
+```
+$ curl -sX DELETE -H "$AUTH_HEADER" "http://localhost:8888/teams/dennis%3Asome-other-team" | jq .
+{
+  "description": "some other team description",
+  "display_extension": "some-other-team",
+  "display_name": "iplant:de:de-2:teams:dennis:some-other-team",
+  "extension": "some-other-team",
+  "name": "dennis:some-other-team",
+  "type": "group",
+  "id": "93559b42f21a4423a4eaf322ea4dba97",
+  "id_index": "11124"
+}
+```
