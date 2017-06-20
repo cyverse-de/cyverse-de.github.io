@@ -11,6 +11,9 @@ title: DE API Documentation
     * [Getting Team Information](#getting-team-information)
     * [Updating a Team](#updating-a-team)
     * [Deleting a Team](#deleting-a-team)
+    * [Listing Team Members](#listing-team-members)
+    * [Adding Team Members](#adding-team-members)
+    * [Removing Team Members](#removing-team-members)
 
 
 # Team Management Endpoints
@@ -215,5 +218,66 @@ $ curl -sX DELETE -H "$AUTH_HEADER" "http://localhost:8888/teams/dennis%3Asome-o
   "type": "group",
   "id": "93559b42f21a4423a4eaf322ea4dba97",
   "id_index": "11124"
+}
+```
+
+## Listing Team Members
+
+Secured Endpoint: GET /teams/{name}/members
+
+Lists the members of a team:
+
+```
+$ curl -sH "$AUTH_HEADER" "http://localhost:8888/teams/dennis%3Aaqua-team/members" | jq .
+{
+  "members": [
+    {
+      "id": "ipctest",
+      "name": "Ipc Test",
+      "first_name": "Ipc",
+      "last_name": "Test",
+      "email": "ipctest@iplantcollaborative.org",
+      "institution": "iplant collaborative",
+      "source_id": "ldap"
+    }
+  ]
+}
+```
+
+## Adding Team Members
+
+Secured Endpoint: POST /teams/{name}/members
+
+Adds members to a team:
+
+```
+$ curl -sH "$AUTH_HEADER" -d '{"members":["dennis"]}' "http://localhost:8888/teams/dennis%3Aaqua-team/members" | jq .
+{
+  "results": [
+    {
+      "success": true,
+      "subject_id": "dennis",
+      "subject_name": "Dennis Roberts"
+    }
+  ]
+}
+```
+
+## Removing Team Members
+
+Secured Endpoint: POST /teams/{name}/members/deleter
+
+Removes members from a team:
+
+```
+$ curl -sH "$AUTH_HEADER" -d '{"members":["dennis"]}' "http://localhost:8888/teams/dennis%3Aaqua-team/members/deleter" | jq .
+{
+  "results": [
+    {
+      "success": true,
+      "subject_id": "dennis",
+      "subject_name": "Dennis Roberts"
+    }
+  ]
 }
 ```
