@@ -14,6 +14,8 @@ title: DE API Documentation
     * [Listing Team Members](#listing-team-members)
     * [Adding Team Members](#adding-team-members)
     * [Removing Team Members](#removing-team-members)
+    * [Listing Team Privileges](#listing-team-privileges)
+    * [Updating Team Privileges](#updating-team-privileges)
 
 
 # Team Management Endpoints
@@ -277,6 +279,154 @@ $ curl -sH "$AUTH_HEADER" -d '{"members":["dennis"]}' "http://localhost:8888/tea
       "success": true,
       "subject_id": "dennis",
       "subject_name": "Dennis Roberts"
+    }
+  ]
+}
+```
+
+## Listing Team Privileges
+
+Secured Endpoint: GET /teams/{name}/privileges
+
+Lists team privileges:
+
+```
+$ curl -sH "$AUTH_HEADER" "http://localhost:8888/teams/dennis%3Aaqua-team/privileges" | jq .
+{
+  "privileges": [
+    {
+      "type": "access",
+      "name": "view",
+      "allowed": true,
+      "revokable": false,
+      "subject": {
+        "id": "GrouperAll",
+        "name": "EveryEntity",
+        "source_id": "g:isa"
+      }
+    },
+    {
+      "type": "access",
+      "name": "admin",
+      "allowed": true,
+      "revokable": true,
+      "subject": {
+        "id": "dennis",
+        "name": "Dennis Roberts",
+        "first_name": "Dennis",
+        "last_name": "Roberts",
+        "email": "dennis@cyverse.org",
+        "institution": "The University of Arizona",
+        "source_id": "ldap"
+      }
+    }
+  ]
+}
+```
+
+## Updating Team Privileges
+
+Secured Endpoint: POST /teams/{name}/privileges
+
+Updates team privileges for one or more subjects:
+
+```
+$ curl -sH "$AUTH_HEADER" -d '{"updates":[{"subject_id":"ipcdev","privileges":["admin", "optin"]}]}' \
+    "http://localhost:8888/teams/dennis%3Aaqua-team/privileges" | jq .
+{
+  "privileges": [
+    {
+      "type": "access",
+      "name": "view",
+      "allowed": true,
+      "revokable": false,
+      "subject": {
+        "id": "GrouperAll",
+        "name": "EveryEntity",
+        "source_id": "g:isa"
+      }
+    },
+    {
+      "type": "access",
+      "name": "admin",
+      "allowed": true,
+      "revokable": true,
+      "subject": {
+        "id": "dennis",
+        "name": "Dennis Roberts",
+        "first_name": "Dennis",
+        "last_name": "Roberts",
+        "email": "dennis@cyverse.org",
+        "institution": "The University of Arizona",
+        "source_id": "ldap"
+      }
+    },
+    {
+      "type": "access",
+      "name": "admin",
+      "allowed": true,
+      "revokable": true,
+      "subject": {
+        "id": "ipcdev",
+        "name": "Ipc Dev",
+        "first_name": "Ipc",
+        "last_name": "Dev",
+        "email": "core-sw@iplantcollaborative.org",
+        "institution": "iPlant Collaborative",
+        "source_id": "ldap"
+      }
+    },
+    {
+      "type": "access",
+      "name": "optin",
+      "allowed": true,
+      "revokable": true,
+      "subject": {
+        "id": "ipcdev",
+        "name": "Ipc Dev",
+        "first_name": "Ipc",
+        "last_name": "Dev",
+        "email": "core-sw@iplantcollaborative.org",
+        "institution": "iPlant Collaborative",
+        "source_id": "ldap"
+      }
+    }
+  ]
+}
+```
+
+Specify an empty list of privileges to remove all privileges for a user:
+
+```
+$ curl -sH "$AUTH_HEADER" -d '{"updates":[{"subject_id":"ipcdev","privileges":[]}]}' \
+    "http://localhost:8888/teams/dennis%3Aaqua-team/privileges" | jq .
+{
+  "privileges": [
+    {
+      "type": "access",
+      "name": "view",
+      "allowed": true,
+      "revokable": false,
+      "subject": {
+        "id": "GrouperAll",
+        "name": "EveryEntity",
+        "source_id": "g:isa"
+      }
+    },
+    {
+      "type": "access",
+      "name": "admin",
+      "allowed": true,
+      "revokable": true,
+      "subject": {
+        "id": "dennis",
+        "name": "Dennis Roberts",
+        "first_name": "Dennis",
+        "last_name": "Roberts",
+        "email": "dennis@cyverse.org",
+        "institution": "The University of Arizona",
+        "source_id": "ldap"
+      }
     }
   ]
 }
