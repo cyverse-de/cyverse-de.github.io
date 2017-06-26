@@ -246,6 +246,8 @@ title: DE API Documentation
 * [GET /teams/{name}/members](endpoints/teams.html#listing-team-members)
 * [POST /teams/{name}/members](endpoints/teams.html#adding-team-members)
 * [POST /teams/{name}/members/deleter](endpoints/teams.html#removing-team-members)
+* [GET /teams/{name}/privileges](endpoints/teams.html#listing-team-privileges)
+* [POST /teams/{name}/privileges](endpoints/teams.html#updating-team-privileges)
 * [GET /tool-requests](endpoints/app-metadata.html#listing-tool-installation-requests)
 * [POST /tool-requests](endpoints/app-metadata.html#requesting-installation-of-a-tool)
 * [GET /tool-requests/status-codes](endpoints/app-metadata.html#listing-tool-request-status-codes)
