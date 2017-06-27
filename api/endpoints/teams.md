@@ -14,6 +14,8 @@ title: DE API Documentation
     * [Listing Team Members](#listing-team-members)
     * [Adding Team Members](#adding-team-members)
     * [Removing Team Members](#removing-team-members)
+    * [Joining a Team](#joining-a-team)
+    * [Leaving a Team](#leaving-a-team)
     * [Listing Team Privileges](#listing-team-privileges)
     * [Updating Team Privileges](#updating-team-privileges)
 
@@ -265,6 +267,8 @@ $ curl -sH "$AUTH_HEADER" -d '{"members":["dennis"]}' "http://localhost:8888/tea
 }
 ```
 
+Each member that is added to the team is also granted `optout` privileges so that they may leave the team at any time.
+
 ## Removing Team Members
 
 Secured Endpoint: POST /teams/{name}/members/deleter
@@ -283,6 +287,53 @@ $ curl -sH "$AUTH_HEADER" -d '{"members":["dennis"]}' "http://localhost:8888/tea
   ]
 }
 ```
+
+The `optout` privilege is revoked from all members that are removed from the group. This does not affect other
+privileges that have been granted to each team member. For example, a team member with `admin` privileges on the group
+will still have the same privileges after being removed from the group.
+
+## Joining a Team
+
+Secured Endpoint: POST /teams/{name}/join
+
+Users with the `optin` privilege on a team may choose to join the team:
+
+```
+$ curl -sX POST -H "$OTHER_AUTH_HEADER" "http://localhost:8888/teams/dennis%3Aaqua-team/join" | jq .
+{
+  "results": [
+    {
+      "success": true,
+      "subject_id": "ipcdev",
+      "subject_name": "Ipc Dev"
+    }
+  ]
+}
+```
+
+The `optout` privilege is automatically granted to the user.
+
+## Leaving a Team
+
+Secured Endpoint: POST /teams/{name}/leave
+
+Team members may leave a team at any time:
+
+```
+$ curl -sX POST -H "$OTHER_AUTH_HEADER" "http://localhost:8888/teams/dennis%3Aaqua-team/leave" | jq .
+{
+  "results": [
+    {
+      "success": true,
+      "subject_id": "ipcdev",
+      "subject_name": "Ipc Dev"
+    }
+  ]
+}
+```
+
+The `optout` privilege is automatically revoked from the user, but all other privileges that have been granted to the
+user will be retained.
 
 ## Listing Team Privileges
 
