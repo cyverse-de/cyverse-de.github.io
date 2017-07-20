@@ -201,3 +201,19 @@ $ curl -sH "$AUTH_HEADER" -d '{"members":["ipctest"]}' http://exmaple.org/collab
   ]
 }
 ```
+
+To retain permissions that had been granted to the collaborator list for removed members, the `retain-permissions` query
+parameter can be added and set to `true`:
+
+```
+$ curl -sH "$AUTH_HEADER" -d '{"members":["ipctest"]}' "http://example.org/collaborator-lists/foo/members/deleter?retain-permissions=true" | jq .
+{
+  "results": [
+    {
+      "success": true,
+      "subject_id": "ipctest",
+      "subject_name": "IPC Test"
+    }
+  ]
+}
+```
