@@ -147,6 +147,23 @@ $ curl -sX DELETE -H "$AUTH_HEADER" "http://example.org/collaborator-lists/bar" 
 }
 ```
 
+To allow members to retain permissions that had been granted to the collaborator list, the `retain-permissions` query
+parameter can be added and set to `true`:
+
+```
+$ curl -sX DELETE -H "$AUTH_HEADER" "http://example.org/collaborator-lists/bar?retain-permissions=true" | jq .
+{
+  "description": "bar",
+  "display_extension": "bar",
+  "display_name": "iplant:de:de-2:users:dennis:collaborator-lists:bar",
+  "extension": "bar",
+  "name": "bar",
+  "type": "group",
+  "id": "f449ea254cdf480a80a7ad96d785389d",
+  "id_index": "10293"
+}
+```
+
 ## Listing Collaborator List Members
 
 Secured Endpoint: GET /collaborator-lists/{name}/members
