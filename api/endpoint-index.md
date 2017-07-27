@@ -181,6 +181,7 @@ title: DE API Documentation
 * [POST /secured/filesystem/move](endpoints/filesystem/move.html#moving-files-andor-directories)
 * [POST /secured/filesystem/move-contents](endpoints/filesystem/move.html#moving-all-items-in-a-directory)
 * [GET /secured/filesystem/paged-directory](endpoints/filesystem/directory-listing.html#paged-directory-listing)
+* [POST /secured/filesystem/path-list-creator](endpoints/filesystem/path-lists.html#ht-path-list-creator)
 * [POST /secured/filesystem/read-chunk](endpoints/filesystem/read-chunk.html#reading-a-chunk-of-a-file)
 * [POST /secured/filesystem/read-csv-chunk](endpoints/filesystem/csv-tsv-parsing.html#csvtsv-parsing)
 * [POST /secured/filesystem/rename](endpoints/filesystem/rename.html#renaming-a-file-or-directory)
