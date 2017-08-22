@@ -245,6 +245,7 @@ title: DE API Documentation
 * [GET /teams/{name}](endpoints/teams.html#getting-team-information)
 * [PATCH /teams/{name}](endpoints/teams.html#updating-a-team)
 * [POST /teams/{name}/join](endpoints/teams.html#joining-a-team)
+* [POST /teams/{name}/join-request](endpoints/teams.html#requesting-to-join-a-team)
 * [POST /teams/{name}/leave](endpoints/teams.html#leaving-a-team)
 * [GET /teams/{name}/members](endpoints/teams.html#listing-team-members)
 * [POST /teams/{name}/members](endpoints/teams.html#adding-team-members)
