@@ -15,6 +15,7 @@ title: DE API Documentation
     * [Adding Team Members](#adding-team-members)
     * [Removing Team Members](#removing-team-members)
     * [Joining a Team](#joining-a-team)
+    * [Requesting to Join a Team](#requesting-to-join-a-team)
     * [Leaving a Team](#leaving-a-team)
     * [Listing Team Privileges](#listing-team-privileges)
     * [Updating Team Privileges](#updating-team-privileges)
@@ -312,6 +313,26 @@ $ curl -sX POST -H "$OTHER_AUTH_HEADER" "http://localhost:8888/teams/dennis%3Aaq
 ```
 
 The `optout` privilege is automatically granted to the user.
+
+## Requesting to Join a Team
+
+Secured Endpoint: POST /teams/{name}/join-request
+
+Users without the `optin` privilege may request to join the team. When the team join request is submitted, a
+notification is sent to one of the team administrators who may approve or deny the request.
+
+```
+$ curl -sH "$AUTH_HEADER" "http://localhost:31325/teams/dennis%3Aaqua-team/join-request" -d '
+{
+    "message": "Because I wanna"
+}'
+```
+
+Submitting an empty request body is equivalent to sending a JSON request body with an empty message:
+
+```
+$ curl -sX POST -H "$AUTH_HEADER" "http://localhost:31325/teams/dennis%3Aaqua-team/join-request"
+```
 
 ## Leaving a Team
 
