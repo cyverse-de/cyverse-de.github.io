@@ -16,6 +16,7 @@ title: DE API Documentation
     * [Removing Team Members](#removing-team-members)
     * [Joining a Team](#joining-a-team)
     * [Requesting to Join a Team](#requesting-to-join-a-team)
+    * [Denying a Request to Join a Team](#denying-a-request-to-join-a-team)
     * [Leaving a Team](#leaving-a-team)
     * [Listing Team Privileges](#listing-team-privileges)
     * [Updating Team Privileges](#updating-team-privileges)
@@ -322,7 +323,7 @@ Users without the `optin` privilege may request to join the team. When the team 
 notification is sent to one of the team administrators who may approve or deny the request.
 
 ```
-$ curl -sH "$AUTH_HEADER" "http://localhost:31325/teams/dennis%3Aaqua-team/join-request" -d '
+$ curl -sH "$AUTH_HEADER" "http://localhost:8888/teams/dennis%3Aaqua-team/join-request" -d '
 {
     "message": "Because I wanna"
 }'
@@ -331,7 +332,26 @@ $ curl -sH "$AUTH_HEADER" "http://localhost:31325/teams/dennis%3Aaqua-team/join-
 Submitting an empty request body is equivalent to sending a JSON request body with an empty message:
 
 ```
-$ curl -sX POST -H "$AUTH_HEADER" "http://localhost:31325/teams/dennis%3Aaqua-team/join-request"
+$ curl -sX POST -H "$AUTH_HEADER" "http://localhost:8888/teams/dennis%3Aaqua-team/join-request"
+```
+
+## Denying a Request to Join a Team
+
+Secured Endpoint: POST /teams/{name}/join-request/{requester}/deny
+
+This endpoint informs a user who has requested to join a team that the request has been denied.
+
+```
+$ curl -sH "$AUTH_HEADER" "http://localhost:8888/teams/dennis%3Aaqua-team/join-request/ipctest/deny" -d '
+{
+    "message": "nope"
+}'
+```
+
+Submitting an empty request body is equivalent to sending a JSON request body with an empty message:
+
+```
+$ curl -sX POST -H "$AUTH_HEADER" "http://localhost:8888/teams/dennis%3Aaqua-team/join-request/ipctest/deny"
 ```
 
 ## Leaving a Team
