@@ -9,6 +9,7 @@ title: DE API Documentation
     * [Listing App Elements](#listing-app-elements)
     * [Listing App Identifiers](#listing-app-identifiers)
     * [Adding Categories](#adding-categories)
+    * [Searching for Categories by Name](#searching-for-categories-by-name)
     * [Deleting Categories](#deleting-categories)
     * [Deleting a Category by ID](#deleting-a-category-by-id)
     * [Updating an App Category](#updating-an-app-category)
@@ -50,6 +51,7 @@ title: DE API Documentation
     * [Granting Access to a Set of Apps](#granting-access-to-a-set-of-apps)
     * [Revoking Access to a Set of Apps](#revoking-access-to-a-set-of-apps)
 
+
 # Application Metadata Endpoints
 
 Note that secured endpoints in Terrain and apps are a little different from each other.
@@ -82,6 +84,15 @@ Please see the apps service documentation for more information.
 Secured Endpoint: POST /admin/apps/categories
 
 Delegates to apps: POST /admin/apps/categories
+
+This endpoint is a passthrough to the apps endpoint using the same path.
+Please see the apps service documentation for more information.
+
+## Searching for Categories by Name
+
+Secured Endpoint: GET /admin/apps/categories/search
+
+Delegates to apps: GET /admin/apps/categories/search
 
 This endpoint is a passthrough to the apps endpoint using the same path.
 Please see the apps service documentation for more information.
