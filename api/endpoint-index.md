@@ -10,6 +10,7 @@ title: DE API Documentation
 * [POST /admin/apps](endpoints/app-metadata.html#categorizing-apps)
 * [GET /admin/apps/categories](endpoints/app-metadata.html#listing-app-categories)
 * [POST /admin/apps/categories](endpoints/app-metadata.html#adding-categories)
+* [GET /admin/apps/categories/search](endpoints/app-metadata.html#searching-for-categories-by-name)
 * [POST /admin/apps/categories/shredder](endpoints/app-metadata.html#deleting-categories)
 * [DELETE /admin/apps/categories/{category-id}](endpoints/app-metadata.html#deleting-a-category-by-id)
 * [PATCH /admin/apps/categories/{category-id}](endpoints/app-metadata.html#updating-an-app-category)
