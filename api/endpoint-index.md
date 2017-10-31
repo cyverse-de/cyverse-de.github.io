@@ -54,7 +54,6 @@ title: DE API Documentation
 * [POST /admin/permanent-id-requests/{request-id}/ezid](endpoints/permanent-id-requests.html#create-a-permanent-id)
 * [POST /admin/permanent-id-requests/{request-id}/status](endpoints/permanent-id-requests.html#update-the-status-of-a-permanent-id-request)
 * [POST /admin/reference-genomes](endpoints/reference-genomes.html#adding-reference-genomes)
-* [PUT /admin/reference-genomes](endpoints/reference-genomes.html#importing-reference-genomes)
 * [DELETE /admin/reference-genomes/{reference-genome-id}](endpoints/reference-genomes.html#deleting-reference-genomes)
 * [PATCH /admin/reference-genomes/{reference-genome-id}](endpoints/reference-genomes.html#updating-reference-genomes)
 * [GET /admin/status](endpoints/admin.html#status-check)
