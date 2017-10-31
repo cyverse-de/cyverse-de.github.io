@@ -9,7 +9,6 @@ title: DE API Documentation
     * [Exporting Reference Genomes](#exporting-reference-genomes)
     * [Get a Reference Genome by ID](#get-a-reference-genome-by-id)
     * [Adding Reference Genomes](#adding-reference-genomes)
-    * [Importing Reference Genomes](#importing-reference-genomes)
     * [Deleting Reference Genomes](#deleting-reference-genomes)
     * [Updating Reference Genomes](#updating-reference-genomes)
 
@@ -38,14 +37,6 @@ This endpoint is a passthrough to the apps endpoint with the same path. Please s
 Secured Endpoint: POST /admin/reference-genomes
 
 Delegates to apps: POST /admin/reference-genomes
-
-This endpoint is a passthrough to the apps endpoint with the same path. Please see the apps service documentation for more details.
-
-## Importing Reference Genomes
-
-Secured Endpoint: PUT /admin/reference-genomes
-
-Delegates to apps: PUT /admin/reference-genomes
 
 This endpoint is a passthrough to the apps endpoint with the same path. Please see the apps service documentation for more details.
 
