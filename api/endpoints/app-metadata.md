@@ -50,6 +50,8 @@ title: DE API Documentation
     * [Listing Permissions for a Set of Apps](#listing-permissions-for-a-set-of-apps)
     * [Granting Access to a Set of Apps](#granting-access-to-a-set-of-apps)
     * [Revoking Access to a Set of Apps](#revoking-access-to-a-set-of-apps)
+    * [Listing Workspaces](#listing-workspaces)
+    * [Deleting Workspaces](#deleting-workspaces)
 
 
 # Application Metadata Endpoints
@@ -502,6 +504,20 @@ Please see the apps service documentation for more details.
 ## Revoking Access to a Set of Apps
 
 Secured Endpoint: POST /apps/unshare
+
+This service is a passthrough to the apps endpoint using the same path.
+Please see the apps service documentation for more details.
+
+## Listing Workspaces
+
+Secured Endpoint: GET /admin/workspaces
+
+This service is a passthrough to the apps endpoint using the same path.
+Please see the apps service documentation for more details.
+
+## Deleting Workspaces
+
+Secured Endpoint: DELETE /admin/workspaces
 
 This service is a passthrough to the apps endpoint using the same path.
 Please see the apps service documentation for more details.
