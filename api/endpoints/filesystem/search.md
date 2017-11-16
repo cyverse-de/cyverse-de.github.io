@@ -249,7 +249,7 @@ $ curl -H "$AUTH_HEADER" \
         },
         {
             "entity": {
-                "creator": "rods#"iplant",
+                "creator": "rods#iplant",
                 "dateCreated": 1381325285000,
                 "dateModified": 1381325285000,
                 "fileSize": 14016,
