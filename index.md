@@ -8,6 +8,7 @@ title: Discovery Environment (DE) Docs
 * [Getting Started](GettingStarted.html)
 * [Architecture](architecture)
 * [API](api)
+* [Miscellaneous non-Terrain APIs](misc-api)
 * [Services](services)
 * [UI](ui)
 * [Ansible](ansible)
