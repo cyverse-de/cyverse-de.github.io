@@ -29,7 +29,7 @@ Each field in an indexed document may be explicitly used in a search query. If t
 
 ### Endpoints
 
-* `GET /secured/filesystem/index`
+* Secured Endpoint: GET /secured/filesystem/index
 
 This endpoint searches the data index and retrieves a set of files and/or folders matching the terms provided in the query string.
 
