@@ -196,6 +196,7 @@ title: DE API Documentation
 * [POST /secured/filesystem/{data-id}/metadata](endpoints/filesystem/metadata.html#setting-metadata)
 * [POST /secured/filesystem/{data-id}/metadata/copy](endpoints/filesystem/metadata.html#copying-all-metadata-from-a-filefolder)
 * [POST /secured/filesystem/{data-id}/metadata/save](endpoints/filesystem/metadata.html#exporting-metadata-to-a-file)
+* [POST /secured/filesystem/{data-id}/ore/save](endpoints/filesystem/ore.html#generating-oai-ore-files-for-a-data-set)
 * [POST /secured/filetypes/type](endpoints/filetypes.html#addupdateunset-a-file-type-of-a-file)
 * [GET /secured/filetypes/type-list](endpoints/filetypes.html#get-the-list-of-supported-file-types)
 * [GET /secured/logout](endpoints/misc.html#recording-when-a-user-logs-out)
