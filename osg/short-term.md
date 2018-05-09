@@ -27,6 +27,7 @@ title: Discovery Environment (DE) Docs
     * [Running the Job](#running-the-job)
     * [Uploading Output Files](#uploading-output-files)
     * [Caveats](#caveats)
+        * [File Creator Problem](#file-creator-problem)
 
 
 # Short-Term OSG Integration
