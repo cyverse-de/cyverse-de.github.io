@@ -285,11 +285,19 @@ def upload_file(ticket, irods_user, owner, src, dest):
         raise Exception("could not remove {0} permissions on {1}".format(irods_user, fullpath))
 
 # Upload a set of files to the directories referenced in a ticket list file to iRODS.
-def upload_files(ticket_list_path, irods_user, owner, files):
+def upload_files(ticket_list_path, irods_user, owner, files, updater):
+    failed_uploads = []
     with TicketListReader(ticket_list_path) as tlr:
         for ticket, dest in tlr:
             for src in files:
-                upload_file(ticket, irods_user, owner, src, dest)
+                updater.running("uploading {0} to {1}".format(src, dest))
+                try:
+                    upload_file(ticket, irods_user, owner, src, dest)
+                except Exception as e:
+                    updater.running(e.message)
+                    failed_uploads.append(src)
+    if len(failed_uploads) > 0:
+        raise Exception("the following files could not be uploaded: {0}".format(failed_uploads))
 ```
 
 ## Caveats
