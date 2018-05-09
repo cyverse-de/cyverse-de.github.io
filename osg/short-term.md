@@ -58,20 +58,20 @@ obtaining the credentials and using them to initialize the iRODS connection.
 
 OSG creates the Singularity images in its CVM-FS repository by pulling Docker images from Dockerhub and converting them
 to Singularity images. This means that the first step to create a Singularity image for OSG is to create a Docker image
-and push it to Dockerhub. Instructions for getting Docker images into OSG's CVM-FS repository can be found [here](1).
+and push it to Dockerhub. Instructions for getting Docker images into OSG's CVM-FS repository can be found [here][1].
 
 ### Requirements
 
 The primary requirements are that the image must contain an executable file called `/usr/bin/wrapper`, and this program
 must read its configuration settings from a file called `config.json` in the current working directory. The
 implemenation language is unimportant as long as all of the tasks required of the wrapper can be performed. CyVerse has
-a reference implementation of such a wrapper script implemented in Python 2.7 available [here](2).
+a reference implementation of such a wrapper script implemented in Python 2.7 available [here][2].
 
 Each image must also have a way to communicate with iRODS. Usually, this means going with one of two options. If you're
 using a JVM language such as Java, Scala or Clojure for the wrapper script then you can communicate with iRODS using
 Jargon. If you're not using a JVM language then the easiest option is to use the iRODS icommands. The wrapper script
 reference implementation provided by CyVerse uses the icommands which are installed as a step in the [corresponding
-Dockerfile](3).
+Dockerfile][3].
 
 This image should also contain an empty directory called `/cvmfs`. When the job is executed, OSG's CVM-FS repository
 will be mounted to this path.
@@ -96,7 +96,7 @@ to parse the field. For example, suppose the following line is found in a ticket
 In this example the ticket string is `521CDB78-8EA4-4F14-94FF-D506DB0D45D7` and the path is `/iplant/home/nobody/the
 foo, the bar, and the baz`.
 
-The [wrapper script reference implementation](2) contains a convenient context manager class that can be used to
+The [wrapper script reference implementation][2] contains a convenient context manager class that can be used to
 correctly parse a ticket list file:
 
 ``` python
@@ -263,7 +263,7 @@ taken to ensure that the user who ran the job can view the output files. The ste
 - give the user ownership of the file if the iRODS user is different from the user who submitted the job
 - remove the iRODS user's privileges on the file if the iRODS user is different from the user who submitted the job
 
-The following example is from the [wrapper script reference implementation](2):
+The following example is from the [wrapper script reference implementation][2]:
 
 ``` python
 # Upload a file or directory to iRODS.
