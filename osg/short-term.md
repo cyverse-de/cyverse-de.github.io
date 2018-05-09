@@ -197,8 +197,8 @@ documentation.
 Job status updates can and should be sent to the DE using HTTP POST requests. The complete URL used to send job status
 updates for the current job is provided in the job configuration file. The request body is a JSON object consisting of
 three fields. The `state` field contains the current job status. The `message` field contains a brief description of
-what the job is currently doing. The `hostname` field contains the host name or IP address tht the request is being sent
-from.
+what the job is currently doing. The `hostname` field contains the host name or IP address that the request is being
+sent from.
 
 ### Status Codes
 
