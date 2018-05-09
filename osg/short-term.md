@@ -3,6 +3,32 @@ layout: page
 title: Discovery Environment (DE) Docs
 ---
 
+# Table of Contents
+
+* [Short-Term OSG Integration](#short-term-osg-integration)
+    * [Image Overview](#image-overview)
+        * [Requirements](#requirements)
+    * [Ticket List Files](#ticket-list-files)
+    * [Job Config Files](#job-config-files)
+        * [arguments](#arguments)
+        * [irods_host](#irods_host)
+        * [irods_port](#irods_port)
+        * [irods_job_user](#irods_job_user)
+        * [irods_user](#irods_user)
+        * [input_ticket_list](#input_ticket_list)
+        * [output_ticket_list](#output_ticket_list)
+        * [status_update_url](#status_update_url)
+        * [stdout](#stdout)
+        * [stderr](#stderr)
+    * [Initializing the iRODS Connection](#initializing-the-irods-connection)
+    * [Sending Job Status Updates](#sending-job-status-updates)
+        * [Status Codes](#status-codes)
+    * [Retrieving Input Files](#retrieving-input-files)
+    * [Running the Job](#running-the-job)
+    * [Uploading Output Files](#uploading-output-files)
+    * [Caveats](#caveats)
+
+
 # Short-Term OSG Integration
 
 The DE can submit jobs to OSG, but the current integration mechanism is very limited in scope and places much of the
