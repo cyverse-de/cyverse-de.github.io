@@ -364,7 +364,7 @@ into iRODS as `foo` and use the icommands to grant permissions on the file to an
 
 This is one reason to consider using custom credentials to log into iRODS; if the password is not empty then
 `dr-nefario` would have to know both the username and the password of the account that uploaded the file (or one of the
-accounts that currently has ownership of the file) in order to be able to access the file.
+accounts that currently has access to the file) in order to be able to access the file.
 
 The drawback to using custom credentials to log into iRODS, however, is that it's difficult to use those credentials
 without exposing them to anyone. If a nefarious user obtains access to those credentials then a similar problem can
