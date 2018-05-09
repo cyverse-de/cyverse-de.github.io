@@ -220,6 +220,10 @@ tasks, so it's important to make sure that one of these updates is sent for each
 If you're using Python, you can use this class from the [reference implementation][2] to send status updates:
 
 ``` python
+# A clean way to print to stderr.
+def eprint(*args, **kwargs):
+    print(*args, file=sys.stderr, **kwargs)
+
 # This is a simple class used to send job status update messages.
 class JobStatusUpdater:
     def __init__(self, url):
