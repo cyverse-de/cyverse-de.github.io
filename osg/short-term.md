@@ -203,12 +203,15 @@ from.
 
 There are three job status codes that can be used in the wrapper script: `running`, `completed` and `failed`. A status
 update with the status code `running` should be sent immediately after the job configuration file is parsed. This
-informs the user that the job has started. The wrapper script may send as many `running` job status updates as it
-wants. It is often helpful to send job status updates when the wrapper script is about to start downloading files, about
-to kick off the analysis itself, and about to start uploading output files.
+informs the user that the job has started. It is also helpful to send job status updates when the wrapper script is
+about to start downloading files, about to kick off the analysis itself, and about to start uploading output
+files. These job status updates can be very helpful when troubleshooting failed jobs in the DE, so it's recommended to
+err on the side of sending too many status updates rather than too few.
 
-The other two status codes, `completed` and `failed`, are intended to be sent only once just before the wrapper script
-exits. If the job completed successfully then the status code should be `completed`. Otherwise, it should be `failed`.
+The other two status codes, `completed` and `failed`, are intended to be sent exactly once just before the wrapper
+script exits. If the job completes successfully then the status code should be `completed`. Otherwise, the status code
+should be `failed`. The DE uses these status codes to notify the user that the job has finished and to trigger cleanup
+tasks, so it's important to make sure that one of these updates is sent for each analysis if possible.
 
 ## Retrieving Input Files
 
