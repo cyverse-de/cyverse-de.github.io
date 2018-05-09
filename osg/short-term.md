@@ -23,6 +23,7 @@ title: Discovery Environment (DE) Docs
     * [Initializing the iRODS Connection](#initializing-the-irods-connection)
     * [Sending Job Status Updates](#sending-job-status-updates)
         * [Status Codes](#status-codes)
+        * [Example Implementation](#example-implementation)
     * [Retrieving Input Files](#retrieving-input-files)
     * [Running the Job](#running-the-job)
     * [Uploading Output Files](#uploading-output-files)
@@ -213,6 +214,36 @@ The other two status codes, `completed` and `failed`, are intended to be sent ex
 script exits. If the job completes successfully then the status code should be `completed`. Otherwise, the status code
 should be `failed`. The DE uses these status codes to notify the user that the job has finished and to trigger cleanup
 tasks, so it's important to make sure that one of these updates is sent for each analysis if possible.
+
+### Example Implementation
+
+If you're using Python, you can use this class from the [reference implementation][2] to send status updates:
+
+``` python
+# This is a simple class used to send job status update messages.
+class JobStatusUpdater:
+    def __init__(self, url):
+        self.url = url
+
+    def print_update(self, status, message):
+        print("{0}: {1}".format(status, message))
+
+    def send_update(self, status, message):
+        self.print_update(status, message)
+        body = {"state": status, "message": message, "hostname": socket.gethostname()}
+        r = requests.post(self.url, json=body)
+        if r.status_code < 200 or r.status_code > 299:
+            eprint("unable to send job status update: {0} {1}: {2}".format(status, message), r.content)
+
+    def failed(self, message):
+        self.send_update("failed", message)
+
+    def running(self, message):
+        self.send_update("running", message)
+
+    def completed(self, message):
+        self.send_update("completed", message)
+```
 
 ## Retrieving Input Files
 
