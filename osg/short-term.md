@@ -302,7 +302,40 @@ def upload_files(ticket_list_path, irods_user, owner, files, updater):
 
 ## Caveats
 
-TODO: add a description of the file creator problem.
+### File Creator Problem
+
+There's a slight issue with the way files are uploaded in this short-term solution. The username passed in the
+configuration file is not `anonymous`, but since the password is empty the account is effectively an anonymous
+account. When a file is uploaded using tickets, the file creator in iRODS is always set to the currently authenticated
+user. This means that anyone with access to the iRODS username passed in the job configuration file has the ability to
+grant themselves permission to the output files from any job that was executed at OSG.
+
+This problem is probably best illustrated using an example. Suppose the username that is used to log into iRODS by a job
+is `foo` and the person who submitted the job has a username of `someuser`. The job runs successfully and a file called
+`secret-stuff.txt` is produced by the job and uploaded to iRODS. The upload process happens as follows:
+
+- the `secret-stuff.txt` is uploaded to the job output directory and file ownership is granted to `foo`
+- the wrapper script grants ownership permission on `secret-stuff.txt` to `someuser`
+- the wrapper script revokes ownership permission on `secret-stuff.txt` from `foo`
+
+So far, everything is okay. The permissions on the file are correct and everyone who should be able to view the file can
+do so. There is one slight problem, however: iRODS maintains a record of the user who created the file and the creator
+is _always_ permitted to grant themselves permissions on any file.
+
+Now suppose that a nefarious user, `drnefario`, learns of an interesting analysis and is aware that `foo` is the creator
+of the output file and that account has the empty string for a password. This means that `drnefario` can log into iRODS
+as `foo` and use the icommands to grant permissions on the file to anyone.
+
+This is one reason to consider using custom credentials to log into iRODS; if the password is not empty then `drnefario`
+would have to know both the username and the password of the account that uploaded the file (or one of the accounts that
+currently has ownership of the file) in order to be able to access the file.
+
+The drawback to using custom credentials to log into iRODS, however, is that it's difficult to use those credentials
+without exposing them to anyone. If a nefarious user obtains access to those credentials then a similar problem can
+still occur.
+
+The DE development team has some ideas for avoiding this issue, but these ideas won't be implemented immediately. We
+plan to have this problem fixed in the medium-term solution for OSG integration.
 
 [1]: https://support.opensciencegrid.org/support/solutions/articles/12000024676-docker-and-singularity-containers
 [2]: https://github.com/iPlantCollaborativeOpenSource/docker-builds/blob/master/osg-word-count/wrapper
