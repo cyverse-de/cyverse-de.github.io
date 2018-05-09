@@ -322,13 +322,13 @@ So far, everything is okay. The permissions on the file are correct and everyone
 do so. There is one slight problem, however: iRODS maintains a record of the user who created the file and the creator
 is _always_ permitted to grant themselves permissions on any file.
 
-Now suppose that a nefarious user, `drnefario`, learns of an interesting analysis and is aware that `foo` is the creator
-of the output file and that account has the empty string for a password. This means that `drnefario` can log into iRODS
-as `foo` and use the icommands to grant permissions on the file to anyone.
+Now suppose that a nefarious user, `dr-nefario`, learns of an interesting analysis and is aware that `foo` is the
+creator of the output file and that account has the empty string for a password. This means that `dr-nefario` can log
+into iRODS as `foo` and use the icommands to grant permissions on the file to anyone.
 
-This is one reason to consider using custom credentials to log into iRODS; if the password is not empty then `drnefario`
-would have to know both the username and the password of the account that uploaded the file (or one of the accounts that
-currently has ownership of the file) in order to be able to access the file.
+This is one reason to consider using custom credentials to log into iRODS; if the password is not empty then
+`dr-nefario` would have to know both the username and the password of the account that uploaded the file (or one of the
+accounts that currently has ownership of the file) in order to be able to access the file.
 
 The drawback to using custom credentials to log into iRODS, however, is that it's difficult to use those credentials
 without exposing them to anyone. If a nefarious user obtains access to those credentials then a similar problem can
