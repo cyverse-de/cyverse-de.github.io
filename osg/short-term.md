@@ -77,7 +77,7 @@ The input and output ticket list files are comma-delimited files with each signi
 string and a file path. Blank lines and lines beginning with a hash mark (`#`) are ignored. The first line in the file
 is a comment line containing the MIME type, `application/vnd.de.tickets-path-list+csv; version=1`.
 
-As mentioned above, each significatn line in the file contains the iRODS ticket string followed by a comma and the path
+As mentioned above, each significant line in the file contains the iRODS ticket string followed by a comma and the path
 corresponding to the ticket. The ticket string is guaranteed not to contain commas, but the path may. None of the fields
 in the ticket list file are ever quoted. Instead, parsers must rely on the fact that tickets will never contain commas
 to parse the field. For example, suppose the following line is found in a ticket list file:
@@ -187,7 +187,7 @@ documentation.
 
 ## Sending Job Status Updates
 
-Job status updateS can and should be sent to the DE using HTTP POST requests. The complete URL used to send job status
+Job status updates can and should be sent to the DE using HTTP POST requests. The complete URL used to send job status
 updates for the current job is provided in the job configuration file. The request body is a JSON object consisting of
 three fields. The `state` field contains the current job status. The `message` field contains a brief description of
 what the job is currently doing. The `hostname` field contains the host name or IP address tht the request is being sent
@@ -207,7 +207,7 @@ exits. If the job completed successfully then the status code should be `complet
 ## Retrieving Input Files
 
 In most cases, input files are retrieved using `iget`, which is the method that will be described here. Other file
-retrieval methods are avilable, but they are beyond the scope of this documentation.
+retrieval methods are available, but they are beyond the scope of this documentation.
 
 The first step in retrieving a file from iRODS is to extract the ticket string and path from the input ticket list
 file. Once you have the ticket and path, `iget` can be executed as follows:
