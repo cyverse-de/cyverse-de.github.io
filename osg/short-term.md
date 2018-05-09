@@ -71,6 +71,8 @@ Dockerfile](3).
 This image should also contain an empty directory called `/cvmfs`. When the job is executed, OSG's CVM-FS repository
 will be mounted to this path.
 
+The location of the default working directory in the image is unimportant.
+
 ## Ticket List Files
 
 The input and output ticket list files are comma-delimited files with each significant line containing an iRODS ticket
