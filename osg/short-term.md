@@ -350,7 +350,7 @@ This problem is probably best illustrated using an example. Suppose the username
 is `foo` and the person who submitted the job has a username of `someuser`. The job runs successfully and a file called
 `secret-stuff.txt` is produced by the job and uploaded to iRODS. The upload process happens as follows:
 
-- the `secret-stuff.txt` is uploaded to the job output directory and file ownership is granted to `foo`
+- `secret-stuff.txt` is uploaded to the job output directory and file ownership is granted to `foo`
 - the wrapper script grants ownership permission on `secret-stuff.txt` to `someuser`
 - the wrapper script revokes ownership permission on `secret-stuff.txt` from `foo`
 
