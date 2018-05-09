@@ -52,7 +52,7 @@ The app integrator is expected to provide a wrapper script that performs the fol
 
 **Note:** a username for the iRODS connection is provided in the job configuration file, but the wrapper script is not
 required to use it. If the wrapper script uses custom iRODS credentials then the script itself is responsible for
-obtaining the credentials and using them to initialize the iROD connection.
+obtaining the credentials and using them to initialize the iRODS connection.
 
 ## Image Overview
 
