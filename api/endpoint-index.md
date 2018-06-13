@@ -121,7 +121,6 @@ title: DE API Documentation
 * [GET /apps/{app-id}/tools](endpoints/app-metadata.html#listing-tools-in-an-app)
 * [GET /apps/{app-id}/ui](endpoints/app-metadata.html#obtaining-an-app-representation-for-editing)
 * [GET /apps?search={term}](endpoints/app-metadata.html#searching-for-apps)
-* [POST /callbacks/notification](endpoints/callbacks.html#receiving-de-notifications)
 * [GET /coge/genomes](endpoints/filesystem/coge.html#searching-for-genomes-in-coge)
 * [POST /coge/genomes/load](endpoints/filesystem/coge.html#viewing-a-genome-file-in-coge)
 * [POST /coge/genomes/{genome-id}/export-fasta](endpoints/filesystem/coge.html#exporting-coge-genome-data-to-irods)
