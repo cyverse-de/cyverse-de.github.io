@@ -5,52 +5,11 @@ title: DE API Documentation
 
 # Table of Contents
 
-* [Callback Endpoints](#callback-endpoints)
-    * [Receiving DE Notifications](#receiving-de-notifications)
-    * [Obtaining OAuth Authorization Codes](#obtaining-oauth-authorization-codes)
+* [Callback Endpoints](#callback-endpoints)    * [Obtaining OAuth Authorization Codes](#obtaining-oauth-authorization-codes)
 
 # Callback Endpoints
 
 These endpoints listed in this document accept callbacks from other services indicating that some event has occurred.
-
-## Receiving DE Notifications
-
-Unsecured Endpoint: POST /callbacks/notification
-
-This endpoint accepts notifications from the notification agent. The request body for this endpoint is a notification in the same format as returned by the notification agent's `/messages` endpoint. Here's an example:
-
-```
-$ curl -sd '{
-    "deleted": false,
-    "message": {
-        "id": "DA357AC8-C311-44AD-BA79-23C9AF73850D",
-        "text": "wc_10081655 submitted",
-        "timestamp": "1381276614133"
-    },
-    "outputDir": "/iplant/home/snow-dog/analyses/wc_10081655-2013-10-08-16-56-53.284",
-    "outputManifest": [],
-    "payload": {
-        "action": "job_status_change",
-        "analysis_id": "C7F05682-23C8-4182-B9A2-E09650A5F49B",
-        "analysis_name": "Word Count",
-        "description": "",
-        "display_name": "",
-        "enddate": "",
-        "id": "29E3A5C8-EAD4-4F79-B450-A2FEF6548C30",
-        "name": "wc_10081655",
-        "resultfolderid": "/iplant/home/snow-dog/analyses/wc_10081655-2013-10-08-16-56-53.284",
-        "startdate": "1381276613284",
-        "status": "Submitted",
-        "user": "snow-dog"
-    },
-    "seen": true,
-    "type": "analysis",
-    "user": "snow-dog"
-}
-' http://by-tor:8888/callbacks/notification | python -mjson.tool
-```
-
-This service currently ignores any notifications that are not job status update notifications. When it receives a job status update notification, it stores updated information about the job status in the database.
 
 ## Obtaining OAuth Authorization Codes
 
