@@ -5,7 +5,8 @@ title: DE API Documentation
 
 # Table of Contents
 
-* [Callback Endpoints](#callback-endpoints)    * [Obtaining OAuth Authorization Codes](#obtaining-oauth-authorization-codes)
+* [Callback Endpoints](#callback-endpoints)
+    * [Obtaining OAuth Authorization Codes](#obtaining-oauth-authorization-codes)
 
 # Callback Endpoints
 
