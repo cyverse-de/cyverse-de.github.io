@@ -67,7 +67,7 @@ and push it to Dockerhub. Instructions for getting Docker images into OSG's CVM-
 
 The primary requirements are that the image must contain an executable file called `/usr/bin/wrapper`, and this program
 must read its configuration settings from a file called `config.json` in the current working directory. (The initial
-working directory cannot be known in advance even if a working directory is specified in the Docker image.)
+working directory cannot be known in advance even if a working directory is specified in the Docker image.)  The
 implementation language is unimportant as long as all of the tasks required of the wrapper can be performed. CyVerse has
 a reference implementation of such a wrapper script implemented in Python 2.7 available [here][2].
 
