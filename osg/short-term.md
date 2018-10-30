@@ -250,7 +250,7 @@ send_status() {
    STATUS=$1
    MSG=$2
 
-   curl -s -d "{\"state\": ${STATUS}, \"message\": ${MSG}, \"hostname\": $(hostname)}" "$STATUS_UPDATE_URL"
+   curl -s -d "{\"state\": \"${STATUS}\", \"message\": \"${MSG}\", \"hostname\": \"$(hostname)\"}" "$STATUS_UPDATE_URL"
 
    if [[ $? != 0 ]]; then
        echo "Failed to send status update ${STATUS}: ${MSG}"
