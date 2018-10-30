@@ -176,7 +176,7 @@ tool.
 ## Initializing the iRODS Connection
 
 As long as you're using version 4.x of the icommands and not using custom iRODS credentials, initializing the iRODS
-connection is very easy. The file, `config.json` is made to be compatible with the file that the icommands use to
+connection is very easy. `config.json` is made to be compatible with the file that the icommands use to
 specify the server connection settings. The wrapper script can simply copy `config.json` to
 `~/.irods/irods_environment.json`. And start using the icommands.
 
