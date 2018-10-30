@@ -28,6 +28,7 @@ title: Discovery Environment (DE) Docs
     * [Retrieving Input Files](#retrieving-input-files)
     * [Running the Job](#running-the-job)
     * [Uploading Output Files](#uploading-output-files)
+    * [JSON Parsing](#json-parsing)
     * [Caveats](#caveats)
         * [File Creator Problem](#file-creator-problem)
 
@@ -330,6 +331,11 @@ The basic algorithm used to upload the files is as follows:
 
 An example Python script can be found [here][4].
 
+## JSON Parsing
+
+If you're writing your wrapper script using a Unix shell, it's helpful to have a versatile tool for parsing JSON
+files. One tool that we use for this purpose at CyVerse is [jq][5].
+
 ## Caveats
 
 ### File Creator Problem
@@ -371,3 +377,4 @@ plan to have this problem fixed in the medium-term solution for OSG integration.
 [2]: https://github.com/cyverse/docker-builds/blob/master/osg-word-count/wrapper
 [3]: https://github.com/cyverse/docker-builds/blob/master/osg-word-count/Dockerfile
 [4]: https://github.com/cyverse/docker-builds/blob/master/osg-word-count/upload-files
+[5]: https://stedolan.github.io/jq/
