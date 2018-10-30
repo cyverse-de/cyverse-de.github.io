@@ -14,7 +14,8 @@ title: Discovery Environment (DE) Docs
         * [irods_host](#irods_host)
         * [irods_port](#irods_port)
         * [irods_job_user](#irods_job_user)
-        * [irods_user](#irods_user)
+        * [irods_user_name](#irods_user_name)
+        * [irods_zone_name](#irods_zone_name)
         * [input_ticket_list](#input_ticket_list)
         * [output_ticket_list](#output_ticket_list)
         * [status_update_url](#status_update_url)
@@ -27,6 +28,7 @@ title: Discovery Environment (DE) Docs
     * [Retrieving Input Files](#retrieving-input-files)
     * [Running the Job](#running-the-job)
     * [Uploading Output Files](#uploading-output-files)
+    * [JSON Parsing](#json-parsing)
     * [Caveats](#caveats)
         * [File Creator Problem](#file-creator-problem)
 
@@ -64,8 +66,9 @@ and push it to Dockerhub. Instructions for getting Docker images into OSG's CVM-
 ### Requirements
 
 The primary requirements are that the image must contain an executable file called `/usr/bin/wrapper`, and this program
-must read its configuration settings from a file called `config.json` in the current working directory. The
-implemenation language is unimportant as long as all of the tasks required of the wrapper can be performed. CyVerse has
+must read its configuration settings from a file called `config.json` in the current working directory. (The initial
+working directory cannot be known in advance even if a working directory is specified in the Docker image.)  The
+implementation language is unimportant as long as all of the tasks required of the wrapper can be performed. CyVerse has
 a reference implementation of such a wrapper script implemented in Python 2.7 available [here][2].
 
 Each image must also have a way to communicate with iRODS. Usually, this means going with one of two options. If you're
@@ -76,8 +79,6 @@ Dockerfile][3].
 
 This image should also contain an empty directory called `/cvmfs`. When the job is executed, OSG's CVM-FS repository
 will be mounted to this path.
-
-The location of the default working directory in the image is unimportant.
 
 ## Ticket List Files
 
@@ -140,10 +141,15 @@ This setting contains the port number to use when connecting to iRODS.
 This setting contains the username of the person who submitted the job. This user should have ownership permissions on
 the output files after the job completes.
 
-### irods_user
+### irods_user_name
 
 This setting contains the username to use when authenticating to iRODS. This setting can be ignored if you're using
 custom iRODS credentials.
+
+### irods_zone_name
+
+This setting contains the zone name to use when authenticating to iRODS and can be ignored if you're using custom iRODS
+credentials.
 
 ### input_ticket_list
 
@@ -169,37 +175,23 @@ tool.
 
 ## Initializing the iRODS Connection
 
-Initializing the iRODS connection is actually fairly simple if you're using version 4.x of the icommands, which is
-highly recommended. The username in the `irods_user` configuration setting is guaranteed to have an empty password, so
-iRODS can be initialized by creating a file called `$HOME/.irods/irods_environment.json`. This file should be in the
-following format:
+As long as you're using version 4.x of the icommands and not using custom iRODS credentials, initializing the iRODS
+connection is very easy. `config.json` is made to be compatible with the file that the icommands use to
+specify the server connection settings. The wrapper script can simply copy `config.json` to
+`~/.irods/irods_environment.json`. And start using the icommands.
 
-```
-{
-    "irods_user_name": "<username>",
-    "irods_host": "<host-name>",
-    "irods_port": <port-number>,
-    "irods_zone_name": ""
-}
-```
-
-For the time being, the zone name should always be equal to the empty string. The rest of the settings are extracted
-from the job configuration file. After creating this file, `iget` and `iput` can be used in conjunction with the iRODS
-tickets to retrieve files from or push files to iRODS.
-
-If you're using custom iRODS credentials with a password then (assuming you're not using Jargon) `iinit` must be called
-before using any of the iRODS icommands. `iinit` only runs in interactive mode, so it will be necessary to send the
-password to `iinit` using redirection. Using custom iRODS credentials is expected to be rare, so precise instructions
-for running `iinit` are beyond the scope of this documentation. Similarly, using Jargon is beyond the scope of this
-documentation.
+If you're using custom iRODS credentials or an older version of the icommands then (assuming you're not using Jargon)
+`iinit` must be called before using any of the iRODS icommands. `iinit` only runs in interactive mode, so it will be
+necessary to send the password to `iinit` using redirection. Using older icommands versions or custom iRODS credentials
+is expected to be rare, so precise instructions for running `iinit` are beyond the scope of this
+documentation. Similarly, using Jargon is beyond the scope of this documentation.
 
 ## Sending Job Status Updates
 
-Job status updates can and should be sent to the DE using HTTP POST requests. The complete URL used to send job status
-updates for the current job is provided in the job configuration file. The request body is a JSON object consisting of
-three fields. The `state` field contains the current job status. The `message` field contains a brief description of
-what the job is currently doing. The `hostname` field contains the host name or IP address that the request is being
-sent from.
+Job status updates must be sent to the DE using HTTP POST requests. The complete URL used to send job status updates for
+the current job is provided in the job configuration file. The request body is a JSON object consisting of three
+fields. The `state` field contains the current job status. The `message` field contains a brief description of what the
+job is currently doing. The `hostname` field contains the host name or IP address that the request is being sent from.
 
 ### Status Codes
 
@@ -249,10 +241,35 @@ class JobStatusUpdater:
         self.send_update("completed", message)
 ```
 
+These example bash functions provide similar functionality:
+
+``` shell
+STATUS_UPDATE_URL="https://rest.example.org/job/job-id/status" # URL comes from config JSON
+
+send_status() {
+   STATUS=$1
+   MSG=$2
+
+   curl -s -d "{\"state\": \"${STATUS}\", \"message\": \"${MSG}\", \"hostname\": \"$(hostname)\"}" "$STATUS_UPDATE_URL"
+
+   if [[ $? != 0 ]]; then
+       echo "Failed to send status update ${STATUS}: ${MSG}"
+   fi
+}
+
+status_failed() {
+   send_status "failed" "$1"
+}
+
+status_running() {
+   send_status "running" "$1"
+}
+```
+
 ## Retrieving Input Files
 
-In most cases, input files are retrieved using `iget`, which is the method that will be described here. Other file
-retrieval methods are available, but they are beyond the scope of this documentation.
+Input files can retrieved using `iget`, which is the method that will be described here. Other file retrieval methods
+are available, but they are beyond the scope of this documentation.
 
 The first step in retrieving a file from iRODS is to extract the ticket string and path from the input ticket list
 file. Once you have the ticket and path, `iget` can be executed as follows:
@@ -291,50 +308,33 @@ def run_job(arguments, output_filename, error_filename):
 
 ## Uploading Output Files
 
-Uploading output files is a little bit more complicated than retrieving input files because additional steps have to be
-taken to ensure that the user who ran the job can view the output files. The steps are:
+Uploading output files is a lot more complicated for two reasons. First, uploading output files in nested directories
+requires some additional steps. Second, file permissions must be altered after the files are uploaded.
 
-- upload the files
-- give the user ownership of the file if the iRODS user is different from the user who submitted the job
-- remove the iRODS user's privileges on the file if the iRODS user is different from the user who submitted the job
+The basic algorithm used to upload the files is as follows:
 
-The following example is from the [wrapper script reference implementation][2]:
+- For each file to upload:
+  - Use `iput -t <ticket>` to upload the file.
+  - Use `ichmod` to grant file ownership to the user who submitted the job.
+  - Use `ichmod` to revoke file ownership from the current iRODS user.
+- For each directory to upload:
+  - Use `iput -rt <ticket>` to create the directory, ignoring any errors. (Permissions errors will occur when it tries
+    to upload the directory contents and `imkdir` can't be used to create the directory because it doesn't support
+    tickets.)
+  - For each file in the directory:
+    - Use `iput` to upload the file. (The ticket isn't used because the newly created directory is owned by the current
+      iRODS user.)
+  - For each subdirectory in the directory:
+    - Use `-put -r` to upload the subdirectory and its contents. (Once again the ticket isn't used.)
+  - Use `ichmod -r` to grant directory ownership to the user who submitted the job.
+  - Use `ichmod -r` to revoke directory ownership from the current iRODS user.
 
-``` python
-# Upload a file or directory to iRODS.
-def upload_file(ticket, irods_user, owner, src, dest):
-    rc = subprocess.call(["iput", "-rt", ticket, src, dest])
-    if rc != 0:
-        raise Exception("could not upload {0} to {1}".format(src, dest))
+An example Python script can be found [here][4].
 
-    # Don't bother modifying the file permissions if the iRODS user and file owner are the same.
-    if irods_user == owner:
-        return
+## JSON Parsing
 
-    # Update the file permissions so that the person who submitted the job can see the output files.
-    fullpath = os.path.join(dest, src)
-    rc = subprocess.call(["ichmod", "own", owner, fullpath])
-    if rc != 0:
-        raise Exception("could not change the owner of {0} to {1}".format(fullpath, owner))
-    rc = subprocess.call(["ichmod", "null", irods_user, fullpath])
-    if rc != 0:
-        raise Exception("could not remove {0} permissions on {1}".format(irods_user, fullpath))
-
-# Upload a set of files to the directories referenced in a ticket list file to iRODS.
-def upload_files(ticket_list_path, irods_user, owner, files, updater):
-    failed_uploads = []
-    with TicketListReader(ticket_list_path) as tlr:
-        for ticket, dest in tlr:
-            for src in files:
-                updater.running("uploading {0} to {1}".format(src, dest))
-                try:
-                    upload_file(ticket, irods_user, owner, src, dest)
-                except Exception as e:
-                    updater.running(e.message)
-                    failed_uploads.append(src)
-    if len(failed_uploads) > 0:
-        raise Exception("the following files could not be uploaded: {0}".format(failed_uploads))
-```
+If you're writing your wrapper script using a Unix shell, it's helpful to have a versatile tool for parsing JSON
+files. One tool that we use for this purpose at CyVerse is [jq][5].
 
 ## Caveats
 
@@ -374,5 +374,7 @@ The DE development team has some ideas for avoiding this issue, but these ideas 
 plan to have this problem fixed in the medium-term solution for OSG integration.
 
 [1]: https://support.opensciencegrid.org/support/solutions/articles/12000024676-docker-and-singularity-containers
-[2]: https://github.com/iPlantCollaborativeOpenSource/docker-builds/blob/master/osg-word-count/wrapper
-[3]: https://github.com/iPlantCollaborativeOpenSource/docker-builds/blob/master/osg-word-count/Dockerfile
+[2]: https://github.com/cyverse/docker-builds/blob/master/osg-word-count/wrapper
+[3]: https://github.com/cyverse/docker-builds/blob/master/osg-word-count/Dockerfile
+[4]: https://github.com/cyverse/docker-builds/blob/master/osg-word-count/upload-files
+[5]: https://stedolan.github.io/jq/
