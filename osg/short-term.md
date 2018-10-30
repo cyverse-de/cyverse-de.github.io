@@ -325,7 +325,7 @@ The basic algorithm used to upload the files is as follows:
     - Use `iput` to upload the file. (The ticket isn't used because the newly created directory is owned by the current
       iRODS user.)
   - For each subdirectory in the directory:
-    - Use `-put -r` to upload the directory and its contents. (Once again the ticket isn't used.)
+    - Use `-put -r` to upload the subdirectory and its contents. (Once again the ticket isn't used.)
   - Use `ichmod -r` to grant directory ownership to the user who submitted the job.
   - Use `ichmod -r` to revoke directory ownership from the current iRODS user.
 
