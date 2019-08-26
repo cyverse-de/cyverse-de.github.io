@@ -12,7 +12,8 @@ without having to select the parameter values that the jobs have in common for e
 Quick Launches are created on a per-user basis,
 but they can be made public when they’re created and shared with other users.
 
-The Swagger docs are available here: https://de.cyverse.org/terrain/docs/index.html#/analyses-quicklaunches
+The Swagger docs are available here:
+[https://de.cyverse.org/terrain/docs/index.html#/analyses-quicklaunches](https://de.cyverse.org/terrain/docs/index.html#/analyses-quicklaunches)
 
 Creating a new Quick Launch is a lot like launching an app.
 The primary difference is that instead of calling the
