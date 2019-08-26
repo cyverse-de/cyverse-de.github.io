@@ -25,3 +25,4 @@ Request and response bodies are in JSON format unless otherwise noted.
 * [Favorites Endpoints](favorites.html)
 * [Tags Endpoints](tags.html)
 * [Permanent ID Requests](permanent-id-requests.html)
+* [Quick Launches](quick-launches.html)
