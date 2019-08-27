@@ -232,7 +232,6 @@ title: DE API Documentation
 * [POST /secured/tags/user](endpoints/tags.html#creating-a-tag)
 * [DELETE /secured/tags/user/{tag-id}](endpoints/tags.html#delete-a-tag)
 * [PATCH /secured/tags/user/{tag-id}](endpoints/tags.html#update-a-tags-label-andor-description)
-* [GET /secured/tree-viewer-urls](endpoints/tree-viewing.html#obtaining-tree-viewer-urls)
 * [POST /secured/unshare](endpoints/sharing.html#unsharing-user-data)
 * [GET /secured/user-info](endpoints/collaborators.html#obtaining-user-info)
 * [GET /secured/user-search?search={search-string}](endpoints/collaborators.html#searching-for-users)
@@ -265,5 +264,4 @@ title: DE API Documentation
 * [GET /tools/{tool-id}](endpoints/tools.html#get-a-tool-by-id)
 * [PATCH /tools/{tool-id}](endpoints/tools.html#updating-tools)
 * [GET /tools/{tool-id}/apps](endpoints/tools.html#listing-apps-by-tool-id)
-* [POST /tree-viewer-urls](endpoints/tree-viewing.html#obtaining-tree-viewer-urls-for-a-post-body)
 * [GET /uuid](endpoints/misc.html#obtaining-identifiers)
