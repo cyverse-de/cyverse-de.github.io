@@ -5,6 +5,24 @@ title: Discovery Environment (DE) Release Notes
 
 # Discovery Environment (DE) Release Notes
 
+## November 2019
+
+* When the user deletes a submitted or running analysis, the service has been updated to cancel the analysis first.
+* Analysis Resource Requirements
+  * User adjustable resource requests, based on the resource requirements and limits defined by an app’s tools, are now available from the app launch dialog.
+* Changes to app publication requests
+  * A single-step app using a public tool. The app should be published and the service returns a 200 status.
+  * A single-step app using a private tool that is in one of the trusted registries. The app and tool will be published and the service returns a 200 status.
+  * A single-step app using a private tool that is not in one of the trusted registries. The app will not be published. Instead, a publication request will be created and the service returns a 202 status.
+  * A pipeline using some public tools and some private tools that are in trusted registries. The pipeline will not be published, and the service returns a 400 status.
+  * A pipeline using some public tools and some private tools that are not in trusted registries.  The pipeline will not be published, and the service will return a 400 status.
+* React migrations
+  * Manage Tools window
+  * Teams window
+  * App Listing
+* Exporting metadata to a file (required for NCBI submissions) is now much faster for folders.
+
+
 ## September 2019
 
 * Run Visual and Interactive Computing Environment (VICE) apps like JupyterLab,
