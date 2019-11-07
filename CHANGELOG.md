@@ -8,7 +8,7 @@ title: Discovery Environment (DE) Release Notes
 ## November 2019
 
 * When the user deletes a submitted or running analysis, the service has been updated to cancel the analysis first.
-* Analysis Resource Requirements
+* [Analyses Resource Requirements](https://learning.cyverse.org/projects/discovery-environment-guide/en/latest/analyses_resource_reqs.html)
   * User adjustable resource requests, based on the resource requirements and limits defined by an app’s tools, are now available from the app launch dialog.
 * Changes to app publication requests
   * A single-step app using a public tool. The app should be published and the service returns a 200 status.
