@@ -9,6 +9,15 @@ Terrain provides the primary point of communication between the Discovery Enviro
 
 ### Additional Documentation
 
+The primary and most current source for Terrain API endpoint documentation
+are the Swagger docs hosted by the service itself:
+[https://de.cyverse.org/terrain/docs](https://de.cyverse.org/terrain/docs)
+
+We are still in the process of migrating the original endpoint documentation found on this site to the Swagger docs hosted by the service.
+Any endpoints listed under the [default](https://de.cyverse.org/terrain/docs/index.html#!/default)
+Swagger category have not been documented in Swagger yet.
+The documentation for those endpoints may still be found below.
+
 * [Endpoints](endpoints)
 * [Errors](errors.html)
 * [Schema](schema.html)
