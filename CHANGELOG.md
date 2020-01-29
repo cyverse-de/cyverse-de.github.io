@@ -5,6 +5,20 @@ title: Discovery Environment (DE) Release Notes
 
 # Discovery Environment (DE) Release Notes
 
+## January 2020
+
+* Communities
+    * Fixed a bug where users were able to share apps with a community via the Share Dialog in the Apps window.
+      This was an unintended feature discovered by a user attempting to get help with their app from the science team.
+      Users should continue to share their apps/analyses to the `siuser` account to get help.
+    * Fixed a bug where users had to deselect the previously selected app in order to select a new app to tag with a community.
+* Analysis Relaunch
+    * Fixed a bug to allow resource requirements set in the original analysis to be used instead of the tool default resource requirements.
+* React Migrations
+    * Tool Details dialog
+    * Edit Teams dialog
+
+
 ## November 2019
 
 * When the user deletes a submitted or running analysis, the service has been updated to cancel the analysis first.
