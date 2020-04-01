@@ -5,6 +5,17 @@ title: Discovery Environment (DE) Release Notes
 
 # Discovery Environment (DE) Release Notes
 
+## March 2020
+
+* Bug where moves into or out of collections with inheritance turned on is presumed fixed.
+* Wording in the Introduction has been updated.
+* Bug where trying to select a collaborator via Choose Collaborators in the sharing dialog is now fixed.
+* Relaunching more than one analysis at a time is now supported:
+    * Relaunching more than one analysis at once will relaunch all selected analyses, reusing their original parameters and analysis names.
+    * If the selected analyses are sub-jobs of an HT analysis, then those selected analyses will still be nested under that parent HT analysis, and their output folders will also be grouped under that parent HT analysis' output folder, but the relaunched sub-jobs will be renamed with a `-redo-#` suffix to differentiate them from their original sub-jobs.
+    * Otherwise, relaunched analyses will be treated as new analyses, even though they reuse the same name and parameters as their original analyses.
+
+
 ## January 2020
 
 * Communities
