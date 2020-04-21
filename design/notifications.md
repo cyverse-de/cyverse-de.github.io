@@ -107,9 +107,9 @@ but it's a good way to ensure that all backwards compatible notifications are ma
 Once the event recorder receives a message, it has to decide what if anything to do with the message. If the event
 recorder decides that no user has to be informed of the event then it will simply acknowledge the message and wait for
 the next one to arrive. If it decides that one or more users have to be informed of the event then processing will
-continue. This decision will be influenced by the category and the update type, so each handler will likely make this in
-a unique manner except in the case of the backwards compatible mode, where the decision has to be made in the same way
-as in the curernt notification agent by necessity.
+continue. This decision will be influenced by the category and the update type, so each handler will likely make this
+decision in a unique manner except. In the case of the backwards compatible mode, the decision will be made in the same
+way as in the curernt notification agent out of necessity.
 
 The next step is to determine who should receive the notifications. This is another decision that is likely to vary
 depending on category and update type. The handler for backwards compatible notifications will only send the
@@ -125,34 +125,33 @@ The next step is to determine exactly what each message should say. At the risk 
 something that will vary depending on the category and update type. We may want to explore internationalization and
 localization for our notification system in the near future, too. The current system, where each service determines the
 wording to use for each type of notification, doesn't really lend itself to internationalization and localization, so
-this won't be implemented right away because the current model, where each service determines the wording of each
-notification separately, doesn't really lend itself to internationalization. We may want to investigate adding `go-i18n`
-(assuming we use Go) to one or more notification services when we start adding handlers other than the backwards
-compatible handler, though.
+this won't be implemented right away. We may want to investigate adding `go-i18n` (assuming we use Go) to one or more
+notification services when we start adding handlers other than the backwards compatible handler, though.
 
 Another thing to consider is how we're going to ensure message order. We can't really provide guarantees for the order
 in which messages are processed, but we can take some steps to control the order in which messages are displayed to the
 user. To this end, each update message will have a timestamp associated with it when it's posted to the AMQP
 exchange. This timestmap will be recorded in the notification database, and it will be used to determine notification
 order when requests are made to list notifications. Current notification requests don't have a timestamp associated with
-them because they're recorded using synchronuous HTTP calls. Because of this, endpoint in the service that provides the
-REST API for notifications will add the timestamp to the notification request before publishing it to the exchange. For
-updates that are posted directly to AMQP, the service itself will be responsible for including the timestamp in the
-request.
+them because they're recorded using synchronuous HTTP calls. Because of this, the endpoint in the service that provides
+the backwards compatible REST API for notifications will add the timestamp to the notification request before publishing
+it to the exchange. For updates that are posted directly to AMQP, the service itself will be responsible for including
+the timestamp in the request.
 
 #### Structure
 
-The portion of the event recorder service that listens for incoming requests and dispatches them to handlers isn't
-likely to change very much over time, so we can code it in a fairly straight forward manner. The event recorder will
+The portion of the event recorder service that listens for incoming requests and dispatches them to handlers doesn't
+have to change based on message category, so we can code it in a fairly straight forward manner. The event recorder will
 subscribe to the routing key wildcard pattern, `events.*.update.*`. As mentioned above, the second and fouth components
 of the routing key are the category and the update type. Once a message arrives, it will be dispatched to a handler
 based on the category. If no handler was registered for the category, then the AMQP message is simply acknowledged and
 ignored. If a handler has been registered for the category then the handler is called in order to process the message
 further. The main listener function does very little else at this point. If the handler returns without an error then
-the message acknowleged. If an error is returned then the message is negatively acknowleged, and it goes back into the
-queue for later processing. Initially, no error limits will be placed on messages so that we can be sure to process each
+the message will be acknowleged. If an error is returned then the message is negatively acknowleged, and it goes back
+into the queue for later processing. No error limits will be placed on messages so that we can be sure to process each
 type of message. The intent is to have the handler return an error only if it's likely that the message can be
-reprocessed successfully at some later time.
+reprocessed successfully at some later time. One consequence of this is that a bug in the event recorder will likely
+cause messages to be backed up in the queue.
 
 One need that is likely to arise is code reuse. All AMQP handlers will need to perform a large number of similar tasks,
 and chances are that identical code will need to be shared amongst several different handlers. [I'm currently planning
