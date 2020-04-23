@@ -101,7 +101,7 @@ category would be `apps` and the update type would be `published`, meaning that 
 easily support different handlers for different types of updates if we wish to do so at some point in the
 future. Backwards compatibilty will be maintained by using `notification` as the category and placing the current
 notification type in the update type field, so all app updates that are posted to the notification publishing route in
-the REST API will automatically have a routing key of `events.notification.update.apps'. This may be slightly confusing,
+the REST API will automatically have a routing key of `events.notification.update.apps`. This may be slightly confusing,
 but it's a good way to ensure that all backwards compatible notifications are managed by the same handler.
 
 Once the event recorder receives a message, it has to decide what if anything to do with the message. If the event
@@ -146,14 +146,158 @@ subscribe to the routing key wildcard pattern, `events.*.update.*`. As mentioned
 of the routing key are the category and the update type. Once a message arrives, it will be dispatched to a handler
 based on the category. If no handler was registered for the category, then the AMQP message is simply acknowledged and
 ignored. If a handler has been registered for the category then the handler is called in order to process the message
-further. The main listener function does very little else at this point. If the handler returns without an error then
-the message will be acknowleged. If an error is returned then the message is negatively acknowleged, and it goes back
-into the queue for later processing. No error limits will be placed on messages so that we can be sure to process each
-type of message. The intent is to have the handler return an error only if it's likely that the message can be
-reprocessed successfully at some later time. One consequence of this is that a bug in the event recorder will likely
-cause messages to be backed up in the queue.
+further. The main listener function does very little else at this point. If the handler returns without an error, then
+the message will be acknowleged. If an error that is likely to be recoverable (that is, if reprocessing the message at a
+later time is likely to succeed) is returned, then the message is negatively acknowleged goes back into the queue for
+later processing. At this time, no limits will be placed on message processing reattempts so that we can be sure to
+process each message that has a reasonable chance of succeeding. If an error that is not likely to be recoverable is
+returned then the most likely cause is a bug somewhere in our system, either in the service that sent the initial
+request or in the event recorder itself. For this reason, an email will be sent to a configurable email address whenever
+an unrecoverable error is detected. In CyVerse's DE deployment, we'll use `intercom-de@cyverse.org` so that an Intercom
+issue will be created and we can follow up later. (At some later time, we may want to have alerts like these go to a
+system monitoring tool such as Prometheus instead.)
 
-One need that is likely to arise is code reuse. All AMQP handlers will need to perform a large number of similar tasks,
-and chances are that identical code will need to be shared amongst several different handlers. [I'm currently planning
-to use composition and interface embedding for this. Devising the structure of the interface is going to take a
-significant amount of thought.]
+Unrecoverable errors will be distinguished from recoverable errors by type. Errors of type `UnrecoverableError` will be
+treated as unrecoverable. Errors of any other type will be treated as recoverable. A special `RecoverableError` type
+will also be created to help make it clear when recoverable and unrecoverable errors are being created.
+
+One need that is likely to arise is code reuse. I entertained the idea of using interface embedding along with a
+template method pattern, but after some thought, this approach seems to be unnecessary. Instead, each message handler
+will implement this interface:
+
+``` go
+type MessageHandler interface {
+    HandleMessage(messageBody map[string]interface{}) error
+}
+```
+
+Bits of code that are good candidates for reuse will be implemented in custom types so that they can be used from within
+each message handler. Some good candidates are posting AMQP messages to the email and notification topics. We _could_
+use the same signature for both cases, but we can provide a little bit of compile-time type checking by creating three
+different types:
+
+``` go
+type MessagePublisher interface {
+    Publish(message interface{}) error
+}
+
+type EmailRequestPublisher interface {
+    Publish(request *EmailRequest) error
+}
+
+type NotificationRequestPublisher interface {
+    Publish(request *NotificationRequest) error
+}
+```
+
+The detals of the `EmailRequest` and `NotificationRequest` structs will be fleshed out in the implementation
+phase. Also, the types may or may not be defined separately from their interfaces. I used the interface syntax in this
+document because it provides a good way to describe a set of behavior implemented by a type in Go.
+
+The `MessagePublisher` type will provide a way to publish an arbitrary message to an AMQP topic. Details about how and
+to which topic messages will be published will be managed by instances of the `MessagePublisher` type. For example, the
+`MessagePublisher` structue might contain a field to store the name of the AMQP topic that the messages will be
+published to.
+
+The other two types will be wrappers around `MessagePublisher` that validate their respective requests before actually
+publishing them to the AMQP topic. If the message validation fails then the request publisher will return an
+`UnrecoverableError`. All other errors encountered by the request publisher will result in a `RecoverableError` being
+returned.
+
+Another piece of code that's not likely to vary amongst message handlers is the code that stores the notification in the
+database. Another type, `NotificationStorer`, will be created for this so that it can be shared amongst the different
+message handler implementations.
+
+### Email Requests
+
+The email requests service has one, admittedly very simple, job. It reads messages from an AMQP topic and uses them to
+format and send requests to the `iplant-email` service. Message acknowledgement will depend largely on the HTTP status
+returned by `iplant-email`. If the status indicates success then the message is positively acknowledged. For the time
+being, all status codes that indicate failure will cause the email requests service to log an error message and
+positively acknowledge the AMQP message.
+
+### RESTful Services
+
+As mentioned above, this component will implement two incompatible APIs. API version 1 will implement the user
+notifications portion of the current `notification-agent` service for backwards compatibility. System notifications
+aren't used anymore, so they will not be implemented in this new version of the notification agent.
+
+#### API Version 1
+
+##### `POST /notification`
+
+This endpoint posts an AMQP message to the `events.notification.update.{notification-type}` endpoint where it can be
+processed by the event recorder component described above. See [the notification agent README][1] for details about the
+request and response bodies.
+
+##### `GET /messages`
+
+This endpoint lists messages that have been stored in the database for the user. See [the notification agent README][2]
+or details.
+
+##### `GET /unseen-messages`
+
+This endpoint lists messages that have been stored in the database for the user that haven't been marked as seen. See
+[the notification agent README][2] or details.
+
+##### `GET /last-ten-messages`
+
+This endpoint lists only the ten most recent messages that were stored for the user in ascending order by
+timestamp. This endpoint is a special case because it sorts messages in ascending order, but only returns the ten most
+recent. See [the notification agent README][3] for details.
+
+##### `GET /count-messages`
+
+This endpoint counts messages of various types, and it will not be fully implemented in the new service because system
+notifications are no longer being supported. See [the notification agent README][4] for endpoint details.
+
+##### `POST /seen`
+
+This endpoint marks notifications as having been seen. See [the notification agent README][5] for details.
+
+##### `POST /mark-all-seen`
+
+This endpoint marks all notifications for a user as having been seen. See [the notification agent README][6] for
+details.
+
+##### `POST /delete`
+
+This endpoint marks notifications as having been deleted. See [the notification agent README][7] for details.
+
+##### `POST /delete-all`
+
+This endpoint marks all notifications for a user as having been deleted. See [the notification agent README][8] for
+details.
+
+#### API Version 2
+
+##### `GET /messages`
+
+This endpoint lists messages that have been stored in the database for a user. This endpoint will remain largely
+unchanged from its counterpart in version 1 of the API. The only change planned at this time is to replace camelCased
+query parameter names with kebab-based query parameter names.
+
+##### `GET /messages/{id}`
+
+This endpoint responds with details about the message with the given message ID. The message must be directed toward the
+user specified in the `user` query parameeter for this endpoint to succeed. If the selected message doesn't exist or
+refers to a notification that isn't directed toward the user then a 404 status will be returned.
+
+##### `POST /messages/{id}/seen`
+
+This endpoint marks an individual message as having been seen. If the message doesn't exist or isn't directed to the
+user mentioned in the `user` query parameter then a 404 status will be returned.
+
+##### `DELETE /messages/{id}`
+
+This endpoint marks an individual message as having ben deleted. If the message doesn't exist or isn't directed to the
+user mentioned in the `user` query parameter then a 404 satus will be returned.
+
+[1]: https://github.com/cyverse-de/notification-agent#requesting-an-arbitrary-notification
+[2]: https://github.com/cyverse-de/notification-agent#getting-notifications-from-the-notification-agent
+[3]: https://github.com/cyverse-de/notification-agent#getting-the-ten-most-recent-notifications
+[4]: https://github.com/cyverse-de/notification-agent#counting-notifications
+[5]: https://github.com/cyverse-de/notification-agent#marking-notifications-as-seen
+[6]: https://github.com/cyverse-de/notification-agent#marking-all-notifications-as-seen
+[7]: https://github.com/cyverse-de/notification-agent#deleting-notifications
+[8]: https://github.com/cyverse-de/notification-agent#deleting-all-notifications
