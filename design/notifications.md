@@ -47,7 +47,7 @@ requests.
 ### Benefits of Splitting Event Recording From the REST API
 
 Aside from the usual benefits of establishing a separation of concerns, splitting the portion of the notification agent
-that records events from the portion that serves the REST API will allow us to scale the two services separately.
+that records events from the portion that serves the REST API will allow us to scale the two services independently.
 
 ## Component Overviews
 
@@ -116,7 +116,7 @@ depending on category and update type. The handler for backwards compatible noti
 notification to the user mentioned in the `user` field of the notification request.
 
 Next, the event recorder will have to determine whether or not an email should be sent. And once again, this decision
-will probably vary depending on the category and update type. Eventually, we'll probably also want to have an
+will probably vary depending on the category and update type. Eventually, we'll probably also want to have a
 subscription mechanism so that users can choose which types of notifications they get emails for. For the backwards
 compatibility case, however, the user will only receive an email if the notificaton request indicates that an email
 should be sent.
@@ -276,7 +276,7 @@ details.
 This endpoint lists messages that have been stored in the database for a user. This endpoint will remain largely
 unchanged from its counterpart in version 1 of the API. But a few changes will be made. First the camelCased query
 parameter names will be replaced with kebab-cased names instead. Second, q new Boolean query parameter,
-`notification-order`, willbe added that will cause the endpoint to apply the `limit` parameter to the query in
+`notification-order`, will be added that will cause the endpoint to apply the `limit` parameter to the query in
 descending order, but return the messages in ascending order. Setting this query parameter to `true` replaces the
 current `/last-ten-messages` endpoint with a more flexible and RESTful alternative. Third, another new Boolean
 parameter, `count-only`, will be added that instructs the endpoint to return just the message counts ratehr than the
@@ -308,7 +308,7 @@ Available query parameters:
 | sort-dir           | Allows the response body to sorted in ascending or descending order (default: descending).   |
 | message-type       | If specified, only messages of the given type will be included in the response.              |
 | notification-order | If `true` messages will be sorted in ascending order after the limit has been applied.       |
-| count-only         | If `true` only the numer of matching messages will be returned.                              |
+| count-only         | If `true` only the number of matching messages will be returned.                             |
 
 ##### `GET /messages/{id}`
 
