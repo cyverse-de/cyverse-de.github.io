@@ -274,24 +274,126 @@ details.
 ##### `GET /messages`
 
 This endpoint lists messages that have been stored in the database for a user. This endpoint will remain largely
-unchanged from its counterpart in version 1 of the API. The only change planned at this time is to replace camelCased
-query parameter names with kebab-based query parameter names.
+unchanged from its counterpart in version 1 of the API. But a few changes will be made. First the camelCased query
+parameter names will be replaced with kebab-cased names instead. Second, q new Boolean query parameter,
+`notification-order`, willbe added that will cause the endpoint to apply the `limit` parameter to the query in
+descending order, but return the messages in ascending order. Setting this query parameter to `true` replaces the
+current `/last-ten-messages` endpoint with a more flexible and RESTful alternative. Third, another new Boolean
+parameter, `count-only`, will be added that instructs the endpoint to return just the message counts ratehr than the
+actual messages. Setting this query parameter to `true` replaces the functionality of the `count-messages` from version
+1 of the API. The response body will take the following form:
+
+```
+{
+    "total": 32,
+    "messages": []
+}
+```
+
+The `total` element will contain the total number of messages that match the request. This element will always be
+present in the response body. The `messages` element will contain the actual notification messages. It will not be
+present if the `count-only` query parameter is present and set to `true`. The format of each message in the list of
+messages will be the same as in API version 1, except that camelCased elements in the top level of the response will be
+replaced by snake_cased elements instead.
+
+Available query parameters:
+
+| Query Parameter    | Description                                                                                  |
+| ------------------ | -------------------------------------------------------------------------------------------- |
+| user               | The username of the user to retrieve notification messages for (required).                   |
+| limit              | The maximum number of messages to return in the response body (default: all messages).       |
+| offset             | The offset of the first message to return in the response body (default: 0).                 |
+| seen               | If `true` messages that have been seen will be included in the response (default: false).    |
+| sort-field         | The field to sort messages by (default: timestamp).                                          |
+| sort-dir           | Allows the response body to sorted in ascending or descending order (default: descending).   |
+| message-type       | If specified, only messages of the given type will be included in the response.              |
+| notification-order | If `true` messages will be sorted in ascending order after the limit has been applied.       |
+| count-only         | If `true` only the numer of matching messages will be returned.                              |
 
 ##### `GET /messages/{id}`
 
 This endpoint responds with details about the message with the given message ID. The message must be directed toward the
 user specified in the `user` query parameeter for this endpoint to succeed. If the selected message doesn't exist or
-refers to a notification that isn't directed toward the user then a 404 status will be returned.
+refers to a notification that isn't directed toward the user then a 404 status will be returned. The response body will
+be the same as the format of the the messages in the `GET /messages` endpoint.
+
+Available query parameters:
+
+| Query Parameter    | Description                                                                                  |
+| ------------------ | -------------------------------------------------------------------------------------------- |
+| user               | The username of the user to retrieve notification messages for (required).                   |
 
 ##### `POST /messages/{id}/seen`
 
 This endpoint marks an individual message as having been seen. If the message doesn't exist or isn't directed to the
-user mentioned in the `user` query parameter then a 404 status will be returned.
+user mentioned in the `user` query parameter then a 404 status will be returned. This endpoint has no response body.
+
+Available query parameters:
+
+| Query Parameter    | Description                                                                                  |
+| ------------------ | -------------------------------------------------------------------------------------------- |
+| user               | The username of the user to update notification messages for (required).                     |
 
 ##### `DELETE /messages/{id}`
 
 This endpoint marks an individual message as having ben deleted. If the message doesn't exist or isn't directed to the
-user mentioned in the `user` query parameter then a 404 satus will be returned.
+user mentioned in the `user` query parameter then a 404 satus will be returned. This endpoint has no response body.
+
+Available query parameters:
+
+| Query Parameter    | Description                                                                                  |
+| ------------------ | -------------------------------------------------------------------------------------------- |
+| user               | The username of the user to delete notification messages for (required).                     |
+
+##### `POST /messages/seen`
+
+This endpoint replaces the `/seen` endpoint in the original API. It allows callers to mark multiple notifications as
+having been seen at once. The request body will change slightly, however. The new request body will contain two optional
+elements: `ids` and `all_notifications`. The `ids` element will contain a list of notification IDs to mark as seen. The
+`all_notifications` element contains a Boolean flag indicating whether or not all notificatons for the user should be
+marked as seen. The `ids` element will be ignored if this element is included and set to `true`.
+
+Available query parameters:
+
+| Query Parameter    | Description                                                                                  |
+| ------------------ | -------------------------------------------------------------------------------------------- |
+| user               | The username of the user to update notification messages for (required).                     |
+
+Request body:
+
+```
+{
+    "ids": [],
+    "all_notifications": false
+}
+```
+
+This endpoint has no response body.
+
+##### `POST /messages/delete`
+
+This endpoint replaces the `/delete` endpoint in the original API. It allows callers to mark multiple notifications as
+having been deleted at once. The request body will change slightly, however. The new request body will contain two
+optional elements: `ids` and `all_notifications`. The `ids` element will contain a list of notification IDs to mark as
+deleted. The `all_notifications` element contains a Boolean flag indicating whether or not all notificatons for the user
+should be marked as deleted. The `ids` element will be ignored if this element is included and set to `true`.
+
+Available query parameters:
+
+| Query Parameter    | Description                                                                                  |
+| ------------------ | -------------------------------------------------------------------------------------------- |
+| user               | The username of the user to delete notification messages for (required).                     |
+
+Request body:
+
+```
+{
+    "ids": [],
+    "all_notifications": false
+}
+```
+
+This endpoint has no response body.
 
 [1]: https://github.com/cyverse-de/notification-agent#requesting-an-arbitrary-notification
 [2]: https://github.com/cyverse-de/notification-agent#getting-notifications-from-the-notification-agent
