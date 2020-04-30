@@ -64,7 +64,9 @@ de-webhooks listen to for incoming notifications.
 This service will listen to the new AMQP topic for incoming email requests and make calls to iplant-email in order to
 actually send the messages. We may eventually want to modify other DE services to publish messages to this topic in
 order to request outgoing emails. If and when all of the other DE services are modified to use AMQP then we may want to
-modify iplant-email to listen to AMQP for incoming requests and remove this service.
+modify iplant-email to listen to AMQP for incoming requests and remove this service. It would also be nice to be able to
+send out something other than plain text email messages. Eventually, `iplant-email` will also be modified to add support
+for sending email messages formatted in HTML.
 
 ### RESTful Services
 
@@ -117,7 +119,8 @@ notification to the user mentioned in the `user` field of the notification reque
 
 Next, the event recorder will have to determine whether or not an email should be sent. And once again, this decision
 will probably vary depending on the category and update type. Eventually, we'll probably also want to have a
-subscription mechanism so that users can choose which types of notifications they get emails for. For the backwards
+subscription mechanism so that users can choose which types of notifications they get emails for. Eventually, we'll also
+want to be able to batch emails for cases when several similar updates arrive in rapid succession. For the backwards
 compatibility case, however, the user will only receive an email if the notificaton request indicates that an email
 should be sent.
 
@@ -273,15 +276,12 @@ details.
 
 ##### `GET /messages`
 
-This endpoint lists messages that have been stored in the database for a user. This endpoint will remain largely
-unchanged from its counterpart in version 1 of the API. But a few changes will be made. First the camelCased query
-parameter names will be replaced with kebab-cased names instead. Second, q new Boolean query parameter,
-`notification-order`, will be added that will cause the endpoint to apply the `limit` parameter to the query in
-descending order, but return the messages in ascending order. Setting this query parameter to `true` replaces the
-current `/last-ten-messages` endpoint with a more flexible and RESTful alternative. Third, another new Boolean
-parameter, `count-only`, will be added that instructs the endpoint to return just the message counts ratehr than the
-actual messages. Setting this query parameter to `true` replaces the functionality of the `count-messages` from version
-1 of the API. The response body will take the following form:
+This endpoint lists messages that have been stored in the database for a user, and will remain largely unchanged from
+its counterpart in version 1 of the API. A couple of changes will be made, however. First the camelCased query parameter
+names will be replaced with kebab-cased names instead. Second, another new Boolean parameter, `count-only`, will be
+added that instructs the endpoint to return just the message counts rather than the actual messages. Setting this query
+parameter to `true` replaces the functionality of the `count-messages` from version 1 of the API. The response body will
+take the following form:
 
 ```
 {
@@ -298,17 +298,16 @@ replaced by snake_cased elements instead.
 
 Available query parameters:
 
-| Query Parameter    | Description                                                                                  |
-| ------------------ | -------------------------------------------------------------------------------------------- |
-| user               | The username of the user to retrieve notification messages for (required).                   |
-| limit              | The maximum number of messages to return in the response body (default: all messages).       |
-| offset             | The offset of the first message to return in the response body (default: 0).                 |
-| seen               | If `true` messages that have been seen will be included in the response (default: false).    |
-| sort-field         | The field to sort messages by (default: timestamp).                                          |
-| sort-dir           | Allows the response body to sorted in ascending or descending order (default: descending).   |
-| message-type       | If specified, only messages of the given type will be included in the response.              |
-| notification-order | If `true` messages will be sorted in ascending order after the limit has been applied.       |
-| count-only         | If `true` only the number of matching messages will be returned.                             |
+| Query Parameter | Description                                                                                  |
+| --------------- | -------------------------------------------------------------------------------------------- |
+| user            | The username of the user to retrieve notification messages for (required).                   |
+| limit           | The maximum number of messages to return in the response body (default: all messages).       |
+| offset          | The offset of the first message to return in the response body (default: 0).                 |
+| seen            | If `true` messages that have been seen will be included in the response (default: false).    |
+| sort-field      | The field to sort messages by (default: timestamp).                                          |
+| sort-dir        | Allows the response body to sorted in ascending or descending order (default: descending).   |
+| message-type    | If specified, only messages of the given type will be included in the response.              |
+| count-only      | If `true` only the number of matching messages will be returned.                             |
 
 ##### `GET /messages/{id}`
 
