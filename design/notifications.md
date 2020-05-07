@@ -302,12 +302,22 @@ Available query parameters:
 | --------------- | -------------------------------------------------------------------------------------------- |
 | user            | The username of the user to retrieve notification messages for (required).                   |
 | limit           | The maximum number of messages to return in the response body (default: all messages).       |
-| offset          | The offset of the first message to return in the response body (default: 0).                 |
 | seen            | If `true` messages that have been seen will be included in the response (default: false).    |
-| sort-field      | The field to sort messages by (default: timestamp).                                          |
 | sort-dir        | Allows the response body to sorted in ascending or descending order (default: descending).   |
+| before-id       | If specified, only messages created before the message with the given ID will be returned.   |
+| after-id        | If specified, only messages created after the message with the given ID will be returned.    |
+| before          | If specified, only messages created before the given timestamp will be returned.             |
+| after           | If specified, only messages created after the given timestamp will be returned.              |
 | message-type    | If specified, only messages of the given type will be included in the response.              |
 | count-only      | If `true` only the number of matching messages will be returned.                             |
+| subject-search  | If specified, only messages with subjects containing the search string will be returned.     |
+| type            | If specified, only messages of the given type will be returned.                              |
+
+The query parameters are significantly different from the previous version of this endpoint. The primary reason for this
+is that we're switching away from a pagination model to a model that allows the caller to specify the bounds of the
+result set using timestamps rather than limits and offsets. This will allow us to keep our notification listings
+performant even as the size of the notifications table grows. It should also provide a slightly better user experience
+because with this change, they'll easily be able to examine notifications that occurred within a specific time range.
 
 ##### `GET /messages/{id}`
 
