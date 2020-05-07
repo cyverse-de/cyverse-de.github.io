@@ -404,6 +404,35 @@ Request body:
 
 This endpoint has no response body.
 
+## Estimates
+
+All estimates are in days or fractions of days.
+
+| Task                                                | Estimate  |
+| --------------------------------------------------- | --------: |
+| Define new database schema.                         |      2.00 |
+| Write migration script.                             |      2.00 |
+| Create a new way to handle database schema updates. |      1.00 |
+| Event recorder service.                             |      2.00 |
+| Email requests service.                             |      1.00 |
+| Initial framework of API service.                   |      0.50 |
+| API v1 POST /notification endpoint.                 |      0.50 |
+| API v1 GET /messages endpoint.                      |      1.50 |
+| API v1 GET /unseen-messages endpoint.               |      0.25 |
+| API v1 GET /last-ten-messages endpoint.             |      0.25 |
+| API v1 GET /count-messages endpoint.                |      0.25 |
+| API v1 POST /seen endpoint.                         |      0.25 |
+| API v1 POST /mark-all-seen endpoint.                |      0.25 |
+| API v1 POST /delete endpoint.                       |      0.25 |
+| API v1 POST /delete-all endpoint.                   |      0.25 |
+| API v2 GET /messages endpoint.                      |      2.00 |
+| API v2 GET /messages/{id} endpoint.                 |      0.25 |
+| API v2 POST /messages/{id}/seen endpoint.           |      0.25 |
+| API v2 DELETE /messages/{id} endpoint.              |      0.25 |
+| API v2 POST /messages/seen endpoint.                |      0.25 |
+| API v2 POST /messages/delete endpoint.              |      0.25 |
+| **Total**                                           | **15.00** |
+
 [1]: https://github.com/cyverse-de/notification-agent#requesting-an-arbitrary-notification
 [2]: https://github.com/cyverse-de/notification-agent#getting-notifications-from-the-notification-agent
 [3]: https://github.com/cyverse-de/notification-agent#getting-the-ten-most-recent-notifications
