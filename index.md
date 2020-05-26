@@ -3,6 +3,8 @@ layout: page
 title: Discovery Environment (DE) Docs
 ---
 
+All code developed by CyVerse is covered by this standard [BSD license][1].
+
 # Overview
 
 * [Getting Started](GettingStarted.html)
@@ -15,4 +17,4 @@ title: Discovery Environment (DE) Docs
 * [Ansible](ansible)
 * [About](about.html)
 
-
+[1]: https://cyverse.org/license
