@@ -24,6 +24,17 @@ Given the sweeping nature of the changes, a few other things will naturally happ
 - Dates should be stored as a point in time, with a separate field used if the modifying user's timezone or locale is relevant
 
 ## Components Overview
+### Database
+
+The database will have a simplified, denormalized version of the underlying data, somewhat similar to the existing Elasticsearch index structure. For example, data would most likely operate off four tables: data (with all the base information), metadata (with both iRODs and DE metadata), permissions, and tags. Apps and analyses would be structured similarly -- a base table with anything of a simple structure (no matter how deeply stored in our other databases), plus extra tables for any sort of variable-sized sub-collections. One such type of sub-collection might be for natural-language strings, which should be stored along localization information, as noted above.
+
+### Indexing tools
+
+These tools will look a lot like our existing tools, except normalized and, of course, using database queries rather than Elasticsearch ones. The existing service these will mimic, where possible, is templeton: have one tool that operates in several modes, with the different modes settting up different ways of triggering the same underlying code paths. Both incremental and periodic modes will be controlled by AMQP messages, as they currently are. One place where this one-service model may not be possible or preferred is for data indexing, where we may wish to retain the split between a Jargon-based tool for incremental indexing (dewey) and a faster, direct database tool for periodic indexing (infosquito). It may be necessary, particularly with iRODs, to create intermediate services that translate messages coming out of that system into a more consumable format for ours, for example deduplicating many subsequent messages affecting the same data, or splitting messages that affect many sections of data.
+
+### Search services
+
+These tools will look a lot like the existing search service (for data search), and may even grow out of it. Their basic structure will be as translators: take in a query, translate it as needed to an underlying query or queries, get results, and translate them into a useful output format. We'll need to create new tools to translate queries into SQL rather than elasticsearch, and probably better tools for assembling documents to return, since Elasticsearch did that for us before. The one entirely new feature would be a universal-search/aggregator implementation.
 
 ## Implementation Options
 
