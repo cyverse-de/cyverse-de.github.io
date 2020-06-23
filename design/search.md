@@ -38,6 +38,12 @@ These tools will look a lot like the existing search service (for data search), 
 
 ## Implementation Options
 
+There's not a whole lot of choices to be made here, really. Other than continuing to use Elasticsearch, Solr, some sort of other custom solution (maybe using Xapian or similar), etc., which would therefore not use, or at least not significantly use, PostgreSQL, the options lie within the capabilities of the DBMS. Perhaps the only significant choice is exactly what fields are indexed and in what ways within the database system, and accordingly how queries are constructed to take advantage of it. According to my research, there's basically three relevant types of indices we can use: regular b-tree indices, which are useful for simple comparisons like equality, less-than, greater-than, and things that can be reduced to them (such as LIKE and ILIKE with no leading wildcard) -- these are useful to some degree on almost every field; full-text-search GIN indices, which are useful for natural-language searching with associated tokenization, stemming, etc -- these are useful only for a select few fields that can be searched as natural language strings; and trigram GIN indices (made possible by the pg_trgm extension), which improve the speed of LIKE, ILIKE, and regular-expression searches that can be decomposed into trigrams -- these are most useful for fields that use these operators.
+
+Accordingly, the indexing strategy will in general be: b-tree indices on almost everything, trigram indices on text fields where wildcarded search terms are valuable, and full-text-search indices on text representing natural language text (which as discussed earlier will be marked with locale information, additionally useful for search).
+
 ## Components Detail
+
+### Database schemata
 
 ## Estimates
