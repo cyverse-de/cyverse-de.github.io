@@ -46,4 +46,27 @@ Accordingly, the indexing strategy will in general be: b-tree indices on almost 
 
 ### Database schemata
 
+#### Data
+
+The main data table:
+
+ - id uuid not null
+ - path text not null
+ - label varchar(1000) not null
+ - creator text not null
+ - datecreated timestamp with time zone not null
+ - datemodified timestamp with time zone not null
+ - filesize bigint
+ - filetype varchar(250)
+
+Metadata:
+
+ - id uuid (used for DE metadata that has IDs)
+ - type text not null
+ - attribute text not null
+ - value text not null
+ - unit text
+ - datecreated timestamp with time zone not null
+ - datemodified timestamp with time zone not null
+
 ## Estimates
