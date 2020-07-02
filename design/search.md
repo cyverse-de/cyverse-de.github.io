@@ -62,11 +62,55 @@ The main data table:
 Metadata:
 
  - id uuid (used for DE metadata that has IDs)
+ - target_id uuid not null (referencing the data table, generally)
  - type text not null
  - attribute text not null
  - value text not null
  - unit text
  - datecreated timestamp with time zone not null
  - datemodified timestamp with time zone not null
+
+Permissions:
+
+ - target_id uuid not null
+ - username text not null
+ - permission text not null
+
+Tags
+
+#### Apps
+
+The main apps table:
+
+ - id uuid not null
+ - name text not null
+ - description text
+ - datecreated timestamp with time zone not null
+ - datemodified timestamp with time zone not null
+
+Integrators (needs to be separate, or no?)
+
+Permissions:
+
+ - target_id uuid not null
+ - username text not null
+ - permission text not null
+
+#### Analyses
+
+Main table:
+
+ - id uuid not null
+ - name text not null
+ - owner text not null
+ - type text not null
+
+app info
+paths?
+
+Permissions:
+ - target_id uuid not null
+ - username text not null
+ - permission text not null
 
 ## Estimates
