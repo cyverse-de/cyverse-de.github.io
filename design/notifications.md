@@ -110,7 +110,7 @@ Once the event recorder receives a message, it has to decide what if anything to
 recorder decides that no user has to be informed of the event then it will simply acknowledge the message and wait for
 the next one to arrive. If it decides that one or more users have to be informed of the event then processing will
 continue. This decision will be influenced by the category and the update type, so each handler will likely make this
-decision in a unique manner except. In the case of the backwards compatible mode, the decision will be made in the same
+decision in a unique manner except, in the case of the backwards compatible mode, the decision will be made in the same
 way as in the curernt notification agent out of necessity.
 
 The next step is to determine who should receive the notifications. This is another decision that is likely to vary
@@ -128,8 +128,8 @@ The next step is to determine exactly what each message should say. At the risk 
 something that will vary depending on the category and update type. We may want to explore internationalization and
 localization for our notification system in the near future, too. The current system, where each service determines the
 wording to use for each type of notification, doesn't really lend itself to internationalization and localization, so
-this won't be implemented right away. We may want to investigate adding `go-i18n` (assuming we use Go) to one or more
-notification services when we start adding handlers other than the backwards compatible handler, though.
+this won't be implemented right away. We may want to investigate adding `go-i18n` to one or more notification services
+when we start adding handlers other than the backwards compatible handler, though.
 
 Another thing to consider is how we're going to ensure message order. We can't really provide guarantees for the order
 in which messages are processed, but we can take some steps to control the order in which messages are displayed to the
@@ -151,8 +151,8 @@ based on the category. If no handler was registered for the category, then the A
 ignored. If a handler has been registered for the category then the handler is called in order to process the message
 further. The main listener function does very little else at this point. If the handler returns without an error, then
 the message will be acknowleged. If an error that is likely to be recoverable (that is, if reprocessing the message at a
-later time is likely to succeed) is returned, then the message is negatively acknowleged goes back into the queue for
-later processing. At this time, no limits will be placed on message processing reattempts so that we can be sure to
+later time is likely to succeed) is returned, then the message is negatively acknowleged and goes back into the queue
+for later processing. At this time, no limits will be placed on message processing reattempts so that we can be sure to
 process each message that has a reasonable chance of succeeding. If an error that is not likely to be recoverable is
 returned then the most likely cause is a bug somewhere in our system, either in the service that sent the initial
 request or in the event recorder itself. For this reason, an email will be sent to a configurable email address whenever
@@ -174,42 +174,17 @@ type MessageHandler interface {
 }
 ```
 
-Bits of code that are good candidates for reuse will be implemented in custom types so that they can be used from within
-each message handler. Some good candidates are posting AMQP messages to the email and notification topics. We _could_
-use the same signature for both cases, but we can provide a little bit of compile-time type checking by creating three
-different types:
+The `messaging.Client` interface already provides much of the functionality we need for dealing with AMQP, so we'll
+primarily use it to handle our interactions with the AMQP exchange. New functions will be added to `messaging.Client` to
+add features that we need that aren't available yet. One potential problem is that `messaging.Client` is a very big
+interface, so the event recorder service will define a separate interface that contains only the functions that it
+needs. A custom implementation of the smaller interface will be used for unit testing. Otherwise, the original
+implementation of `messaging.Client` will be used.
 
-``` go
-type MessagePublisher interface {
-    Publish(message interface{}) error
-}
-
-type EmailRequestPublisher interface {
-    Publish(request *EmailRequest) error
-}
-
-type NotificationRequestPublisher interface {
-    Publish(request *NotificationRequest) error
-}
-```
-
-The detals of the `EmailRequest` and `NotificationRequest` structs will be fleshed out in the implementation
-phase. Also, the types may or may not be defined separately from their interfaces. I used the interface syntax in this
-document because it provides a good way to describe a set of behavior implemented by a type in Go.
-
-The `MessagePublisher` type will provide a way to publish an arbitrary message to an AMQP topic. Details about how and
-to which topic messages will be published will be managed by instances of the `MessagePublisher` type. For example, the
-`MessagePublisher` structue might contain a field to store the name of the AMQP topic that the messages will be
-published to.
-
-The other two types will be wrappers around `MessagePublisher` that validate their respective requests before actually
-publishing them to the AMQP topic. If the message validation fails then the request publisher will return an
-`UnrecoverableError`. All other errors encountered by the request publisher will result in a `RecoverableError` being
-returned.
-
-Another piece of code that's not likely to vary amongst message handlers is the code that stores the notification in the
-database. Another type, `NotificationStorer`, will be created for this so that it can be shared amongst the different
-message handler implementations.
+The other piece of code that is likely to be shared among all message handlers is the code to interact with the
+database. This code doesn't have to vary much between the message handlers, so there's not much of a need for
+polymorphism. The only exception is unit testing. Handlers will interact with the database using a `DatabaseClient`
+interface so that we can easily create a mock implementation for testing.
 
 ### Email Requests
 
