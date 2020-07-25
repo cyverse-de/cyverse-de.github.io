@@ -48,6 +48,8 @@ Accordingly, the indexing strategy will in general be: b-tree indices on almost 
 
 #### Data
 
+// add notes about what columns mean?
+
 The main data table:
 
  - id uuid not null
@@ -113,4 +115,31 @@ Permissions:
  - username text not null
  - permission text not null
 
+### Indexing tools
+
+As mentioned above, the indexing tools will (in general) follow the model set by the existing templeton services: a "full index" mode, a "periodic" mode, and an "incremental" mode. In general use, there will be one service in kubernetes running a periodic-mode indexer and one running an incremental-mode indexer. The structure of the code will be, roughly:
+
+ - mode is passed in as a flag to the service
+ - for "periodic" mode, set the service to listen for AMQP messages that trigger reindexing (this has, historically, been a message with the routing key `index.all`, or `index.<type>`, where type might be data, apps, etc.; when the message is received, crawl the entire data source and check against the search database, adding, updating, and deleting as you go. For efficiency with larger data sources (i.e. iRODS), these services may choose to partition the work and distribute it amongst several replicas, probably also using AMQP messaging (for an example of this, the current infosquito2 service does this)
+ - for "incremental" mode, set the service to listen for AMQP messages that indicate changes to small parts of the source data, e.g. a single file or app. When a message is received, check only that subsection of the data and update it as appropriate.
+ - for "full index" mode, go immediately into a crawl of the entire data source as the periodic mode does, but without listening for AMQP messages first, and exit afterwards. This mode is primarily useful for testing and for initialization of the search database.
+
+One consideration for the frontend in this setup is that since updates are asynchronous, it's possible for search to return information that isn't up to date with the underlying data source. This is currently handled with data search by showing exactly what search returns, not considering what iRODS may or may not believe at that moment. The other option to avoid errors would be, if the underlying data source needs to be referenced, to be especially foregiving about errors (particularly for permissions), and when possible to get the information from the underlying source sooner rather than later, to limit the possibility of user confusion. The former approach is likely to be more performant but less consistent, and the latter option describes a spectrum of options that reduce performance while improving consistency. A mitigation we could consider would be to implement a priority system for the AMQP messages sent for incremental indexing, and put changes that are more likely to cause issues in higher-priority brackets (e.g. changes in permissions); I'm considering that out of scope for now, however.
+
+### Search & query-translation
+The search service in general operates by taking in queries and translating them to SQL, fetching results, and then formatting them for consumption. The return formats will be similar to our existing APIs, so I won't go into detail on those, but the query translation bears some additional detail.
+
+I'll use a shorthand to express the intent of the query, though it will be done in the actual service with a more verbose JSON-based format, so as to avoid spending too much time writing parsers for a custom format.
+
+First, a simple example. Imagine a query like `label:"*example.bam*" AND path_prefix:"/iplant/home/atreyu/"`, which is about what the current simple search does. That query is expressed as two clauses, one for the label and one for the path prefix, joined with AND. Elasticsearch, and our current search service, use a structure with three lists: ES calls them must, should, and must_not; our search service uses all, any, none; so, in that option, the two clauses would appear in the 'must' or 'all' list. Upon getting the query, the service would generate fragments of SQL from each, intended to be combined into a WHERE clause. In this case, that would be sufficient, though in other cases the service may need to be able to modify other pieces of a SELECT query such as joins, window functions, or CTEs. For the label clause, assuming our defaults expect case-insensitive search with wildcards on both sides, the fragment would be something like `label ILIKE '%example.bam%'`; for the path, case sensitivity would need to be turn on, so it would be `path LIKE '/iplant/home/atreyu/%'`. (Despite the leading wildcard, a trigram index can help with the label clause). The produced query would therefore look roughly like: `SELECT (...relevant columns to produce JSON output) FROM data (... any joins needed to produce the output) WHERE label ILIKE '%example.bam%' AND path LIKE '/iplant/home/atreyu/%';`.
+
+For a more complex example (but less intermediate explanation): `any(label:"*example.bam*", label:"*test.bam*"), all(metadata:(attribute:"ipc-filetype",value:"unknown"), metadata(attribute:"usecase-specific",value:"bam*")` would create fragments for all the clauses, combine with AND and OR as needed by any/all. Therefore in something like pseudocode:
+
+```
+"(" + [labelClause1, labelClause2].join(" OR ") + ") AND " + [metadataClause1, metadataClause2].join(" AND ")
+```
+
+The metadata clauses would need to create fragments like `EXISTS (SELECT 1 FROM metadata WHERE (... stuff that ties it to the external query's data IDs) AND metadata.attribute = "..." AND metadata.value = "...")`; or, depending on what goes in the initial part of the query (what columns are selected how), it might be possible to use array functions and matching, or json operators, to avoid the subselect.
+
 ## Estimates
+// test performance, compare
