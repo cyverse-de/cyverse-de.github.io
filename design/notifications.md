@@ -220,9 +220,14 @@ This endpoint lists messages that have been stored in the database for the user 
 
 ##### `GET /last-ten-messages`
 
-This endpoint lists only the ten most recent messages that were stored for the user in ascending order by
-timestamp. This endpoint is a special case because it sorts messages in ascending order, but only returns the ten most
-recent. See [the notification agent README][3] for details.
+This endpoint will not be implemented in the new `notifications` serivce. It lists only the ten most recent messages
+that were stored for the user in ascending order by timestamp. This endpoint is a special case because it sorts messages
+in ascending order, but only returns the ten most recent. See [the notification agent README][3] for details.
+
+This endpoint was implemented so that the UI would not have to sort the notifications in memory. It turns out that the
+UI was sorting messages back in descending order by timestamp, however, so the extra sorting step was simply
+wasted. Rather than reimplement this endpoint in the new service, the current DE UI will be modified to use the
+`/messages` endpoint instead.
 
 ##### `GET /count-messages`
 
