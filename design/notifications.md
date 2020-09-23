@@ -266,15 +266,18 @@ take the following form:
 ```
 {
     "total": 32,
-    "messages": []
+    "messages": [],
+    "before_id": "85237820-06d9-44a7-8dfb-9e2070de349f",
+    "after_id": "a69a2c11-94c7-4558-a0a8-0b44ca7ab74f"
 }
 ```
 
 The `total` element will contain the total number of messages that match the request. This element will always be
 present in the response body. The `messages` element will contain the actual notification messages. It will not be
-present if the `count-only` query parameter is present and set to `true`. The format of each message in the list of
-messages will be the same as in API version 1, except that camelCased elements in the top level of the response will be
-replaced by snake_cased elements instead.
+present if the `count-only` query parameter is present and set to `true`. The `before_id` and `after_id` elements are
+used for paginated listings and will be described in greater detail later. Both of these elements will be omitted if
+they do not apply. The format of each message in the list of messages will be the same as in API version 1, except that
+camelCased elements in the top level of the response will be replaced by snake_cased elements instead.
 
 Available query parameters:
 
@@ -286,18 +289,28 @@ Available query parameters:
 | sort-dir        | Allows the response body to sorted in ascending or descending order (default: descending).   |
 | before-id       | If specified, only messages created before the message with the given ID will be returned.   |
 | after-id        | If specified, only messages created after the message with the given ID will be returned.    |
-| before          | If specified, only messages created before the given timestamp will be returned.             |
-| after           | If specified, only messages created after the given timestamp will be returned.              |
-| message-type    | If specified, only messages of the given type will be included in the response.              |
+| limit           | If specified, the number of messages in the listing will be limited to the parameter value.  |
 | count-only      | If `true` only the number of matching messages will be returned.                             |
 | subject-search  | If specified, only messages with subjects containing the search string will be returned.     |
 | type            | If specified, only messages of the given type will be returned.                              |
 
 The query parameters are significantly different from the previous version of this endpoint. The primary reason for this
-is that we're switching away from a pagination model to a model that allows the caller to specify the bounds of the
-result set using timestamps rather than limits and offsets. This will allow us to keep our notification listings
-performant even as the size of the notifications table grows. It should also provide a slightly better user experience
-because with this change, they'll easily be able to examine notifications that occurred within a specific time range.
+is that we're switching from offset pagination to keyset pagination. This will allow us to keep our notification
+listings performant even as the size of the notifications table grows.
+
+The `limit` query parameter indicates the maximum number of messages to include in the response. If more than `limit`
+messages match the other query parameters, the response body will contain `before_id`, `after_id`, or both. The
+`before_id` element is the identifier of the oldest matching notification that precedes all of the messages on the
+current page. Similarly, the `after_id` element is the identifier of the most recent matching notification that succeeds
+all of the messages on the current page. Both the `before_id` element and the `after_id` element will be omitted if
+there are no matching messages that precede or succeed the current message, respectively.
+
+The `before-id` and `after-id` query parameters can be used to move to different pages. If the sort order is ascending
+then you can go to the next page by passing the ID from the `after_id` element of the previous request's response body
+to the `after-id` query parameter in the current request. Similarly, You can go to the previous page, by retrieving the
+value of the `before_id` element and passing it in the `before-id` query parameter of the next API call. If the sort
+order is descending then copying the `after_id` element to the `after-id` query parameter will go to the previous page,
+and copying the `before_id` element to the `before-id` query parameter will go to the next page.
 
 ##### `GET /messages/{id}`
 
