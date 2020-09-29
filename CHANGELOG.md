@@ -5,6 +5,12 @@ title: Discovery Environment (DE) Release Notes
 
 # Discovery Environment (DE) Release Notes
 
+## September 2020
+
+* Fixed a bug in the DE where dialogs with paths in them would incorrectly mark the path as invalid and fail validation
+* Added announcers in the DE to indicate to users that data moves are now asynchronous
+
+
 ## March 2020
 
 * Bug where moves into or out of collections with inheritance turned on is presumed fixed.
