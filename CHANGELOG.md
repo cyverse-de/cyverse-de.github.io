@@ -10,6 +10,15 @@ title: Discovery Environment (DE) Release Notes
 * Fixed a bug in the DE where dialogs with paths in them would incorrectly mark the path as invalid and fail validation
 * Added announcers in the DE to indicate to users that data moves are now asynchronous
 
+## August 2020
+
+* Users will now receive notifications when asynchronous file and folder actions (rename, move, delete, etc.) are completed.
+* Fixed a bug in the DOI Request service to allow the data folder to move asynchronously.
+
+## July 2020
+
+* VICE apps are now restricted and require authorization.
+  Users will be notified to request access, or if their concurrent VICE job limit is reached.
 
 ## March 2020
 
