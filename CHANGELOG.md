@@ -8,6 +8,8 @@ title: Discovery Environment (DE) Release Notes
 ## November 2020
 
 * Assorted performance improvements in data, app, and analysis listings, as well as other data endpoints.
+* Allowed anonymous user access to public community data (includes directory listing, searching, and
+ viewing files)
 
 ## September 2020
 
