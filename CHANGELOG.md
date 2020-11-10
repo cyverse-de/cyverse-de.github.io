@@ -5,6 +5,10 @@ title: Discovery Environment (DE) Release Notes
 
 # Discovery Environment (DE) Release Notes
 
+## November 2020
+
+* Assorted performance improvements in data, app, and analysis listings, as well as other data endpoints.
+
 ## September 2020
 
 * Fixed a bug in the DE where dialogs with paths in them would incorrectly mark the path as invalid and fail validation
