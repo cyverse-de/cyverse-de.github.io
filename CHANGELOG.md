@@ -5,6 +5,10 @@ title: Discovery Environment (DE) Release Notes
 
 # Discovery Environment (DE) Release Notes
 
+## December 2020
+* Allowed anonymous user access to public apps (includes public apps listing, searching, and viewing app details and 
+  documentation)
+
 ## November 2020
 
 * Assorted performance improvements in data, app, and analysis listings, as well as other data endpoints.
