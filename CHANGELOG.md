@@ -7,9 +7,9 @@ title: Discovery Environment (DE) Release Notes
 
 ## February 2021
 
-* The Discovery Environment 2.0 (beta) is now live at https://de2.cyverse.org
+* The Discovery Environment 2.0 (beta) is now live at [https://de2.cyverse.org](https://de2.cyverse.org)
 * Includes performance improvements and new features such as a Dashboard with recently used apps and analyses, global search bar, and listings for public apps and data with no login required.
-* Some features in the original DE (still available at https://de.cyverse.org until deprecated in summer 2021) that are not yet implemented in DE 2.0:
+* Some features in the original DE (still available at [https://de.cyverse.org](https://de.cyverse.org) until deprecated in summer 2021) that are not yet implemented in DE 2.0:
   * Apps: integrating new apps, editing, copying, and publishing
   * Communities: administrating, managing, and browsing
   * Teams: request to join a team and notifications related to your request
