@@ -5,6 +5,25 @@ title: Discovery Environment (DE) Release Notes
 
 # Discovery Environment (DE) Release Notes
 
+## May 2021
+
+* The Discovery Environment 2.0 was released and is now available at [https://de.cyverse.org](https://de.cyverse.org)
+* The legacy Discovery Environment is still available for users until July 5th 2021 at [https://legacy-de.cyverse.org](https://legacy-de.cyverse.org)
+* Features ported to DE 2.0 from the Legacy DE during this release
+  * Apps: integrating new apps, editing, and publishing
+  * Webhooks Notification
+  * Moving files and folders
+  * Requesting access to Visual Interactive Computing Environment (VICE) apps
+  * Teams: request to join a team and notifications related to your request
+  * HPC (TAPIS authentication)
+  * VICE analysis authentication using Keycloak
+* New Feature
+  * Instant Launch - Instanly launch a VICE app from the dashboard with 1 click or from the Data View
+  * Access the Discovery Environment using github credentials
+  * Copy link for an app, file or folder from corresponding view or from the search results
+  * In-app VICE loading page
+
+
 ## February 2021
 
 * The Discovery Environment 2.0 (beta) is now live at [https://de2.cyverse.org](https://de2.cyverse.org)
