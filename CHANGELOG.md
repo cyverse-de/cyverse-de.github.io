@@ -5,6 +5,20 @@ title: Discovery Environment (DE) Release Notes
 
 # Discovery Environment (DE) Release Notes
 
+## June 2021
+* Features ported to DE 2.0 from the Legacy DE during this release
+  * Editing and syntax highlighting of files up to 8 MiB
+  * Copy Metadata
+  * Delete, Copy Apps
+* New Feature
+  * Markdown live preview
+  * Prompt users to update their account information annually
+* Bug fixes
+  * Fix bugs related to creating and editing tools
+  * Fix bugs related to app creation
+  * Restrict users to 1 active VICE access request at a time
+  * Analyses listing and sharing performance improvements   
+
 ## May 2021
 
 * The Discovery Environment 2.0 was released and is now available at [https://de.cyverse.org](https://de.cyverse.org)
