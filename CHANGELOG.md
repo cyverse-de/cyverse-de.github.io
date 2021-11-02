@@ -5,6 +5,14 @@ title: Discovery Environment (DE) Release Notes
 
 # Discovery Environment (DE) Release Notes
 
+## July - Nov 2021
+* Cloud Shell App is available from sidebar to instantly get access to terminal screen (zsh)
+* Emails notifications are now HTML formatted and provides contextual link back to the DE
+* CyVerse featured Apps - Apps integrated, tested and maintained by Team CyVerse
+* Community Collection of Apps - Apps grouped together by a topic or research community
+* Instant launches - One click launch to VICE analysis
+* Create Public Links for multiple files at once
+
 ## June 2021
 * Features ported to DE 2.0 from the Legacy DE during this release
   * Editing and syntax highlighting of files up to 8 MiB
