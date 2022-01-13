@@ -1,8 +1,8 @@
-Copyright (c) 2011-2017, The Arizona Board of Regents on behalf of The University of Arizona
+Copyright (c) 2011-2022, The Arizona Board of Regents on behalf of The University of Arizona
 
 All rights reserved.
 
-Developed by: CyVerse as a collaboration between participants at BIO5 at The University of Arizona (the primary hosting
+Developed by CyVerse as a collaboration between participants at BIO5 at The University of Arizona (the primary hosting
 institution), Cold Spring Harbor Laboratory, The University of Texas at Austin, and individual contributors. Find out
 more at http://www.cyverse.org/.
 
